@@ -3,3 +3,21 @@ body {
   padding: 0;
   font-family: sans-serif;
 }
+
+.carouselWrapper div.carousel-caption {
+    top: 0;
+    color: blanchedalmond;
+    font-weight: 600;
+    padding-top: 12px;
+    background: rgba(0,0,0,0.3);
+    right: 0;
+    width: 100%;
+    left: 0;
+}
+
+.carouselWrapper img.inforimg{
+    position: absolute;
+    zoom: 0.7;
+    left: 376px;
+    top: 140px;
+}

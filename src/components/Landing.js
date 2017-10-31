@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import land1 from '../img/landing.jpg';
 import land2 from '../img/landing1.jpg';
+import inforimg from '../img/infor.png';
 
 
 import {
@@ -63,7 +64,7 @@ class Landing extends Component {
   render() {
     const { activeIndex } = this.state;
 
-    const slides = items.map((item) => {
+    const slides = items.map((item, index) => {
       return (
         <CarouselItem
           onExiting={this.onExiting}
@@ -73,11 +74,13 @@ class Landing extends Component {
           altText={item.altText}
         >
           <CarouselCaption captionText={item.caption} captionHeader={item.altText}/>
+          {index===1?<img className = "inforimg" src = {inforimg} alt = ""/>:""}
         </CarouselItem>
       );
     });
 
     return (
+      <div className = "carouselWrapper">
       <Carousel
         activeIndex={activeIndex}
         next={this.next}
@@ -88,6 +91,7 @@ class Landing extends Component {
         <CarouselControl direction="prev" directionText="Previous" onClickHandler={this.previous} />
         <CarouselControl direction="next" directionText="Next" onClickHandler={this.next} />
       </Carousel>
+      </div>
     );
   }
 }

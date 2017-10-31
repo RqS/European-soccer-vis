@@ -9,6 +9,7 @@
     "react-dom": "^16.0.0",
     "react-image-zoom": "^0.6.1",
     "react-scripts": "1.0.14",
+    "react-scroll": "^1.6.4",
     "reactstrap": "^5.0.0-alpha.3"
   },
   "scripts": {

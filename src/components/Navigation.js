@@ -2,6 +2,7 @@ import React from 'react';
 import { Collapse, Navbar, NavbarToggler, NavbarBrand, Nav, NavItem, Button, ButtonGroup, ButtonDropdown } from 'reactstrap';
 import logo from '../img/logo.png';
 import { DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
+import Scroll from 'react-scroll';
 
 
 
@@ -53,7 +54,7 @@ export default class Navigation extends React.Component {
                   <DropdownItem>Another Action</DropdownItem>
                 </DropdownMenu>
               </ButtonDropdown>
-              <Button href="#">Team</Button>
+              <Button href="#Team" onClick={()=>{Scroll.animateScroll.scrollTo(600, 0);}}>Team</Button>
               <Button href="https://github.com/INF554Fall17/project-ls-z">Github</Button>
             </ButtonGroup>
             </NavItem>

@@ -4,7 +4,7 @@ import rqs from '../img/rqs.png';
 
 const Member = (props) => {
   return (
-    <CardGroup>
+    <CardGroup style = {{"marginTop":"-50px"}}>
       <Card>
         <CardImg top width="100%" src="https://placeholdit.imgix.net/~text?txtsize=33&txt=256%C3%97180&w=256&h=180" alt="Card image cap" />
         <CardBody>
@@ -15,7 +15,7 @@ const Member = (props) => {
         </CardBody>
       </Card>
       <Card>
-        <CardImg top width="100%" src={rqs} alt="rqs" style = {{"zoom":"0.35", "marginLeft":"-25px"}} />
+        <CardImg top width="100%" src={rqs} alt="rqs" />
         <CardBody>
           <CardTitle>Runqi Shao</CardTitle>
           <CardSubtitle>Soccer Fan</CardSubtitle>
