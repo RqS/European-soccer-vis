@@ -15,12 +15,12 @@ const items = [
   {
     src: land1,
     altText: 'European Soccer Transfer Market Visulization and Analysis',
-    caption: 'Powered by Team ls -z'
+    caption: 'Powered by Team LS -Z'
   },
   {
     src: land2,
-    altText: 'SOME FUN FACT',
-    caption: ''
+    altText: 'SOME FUN FACTS',
+    caption: '______________❤______________'
   }
 ];
 
