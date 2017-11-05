@@ -34,7 +34,7 @@ for line in i:
 			result["age"] = line["age"]
 			result["name"] = line["name"]
 			result["club name"] = line["current club"]
-		lst.append(result)
+			lst.append(result)
 
 json.dump(lst, o)
 
