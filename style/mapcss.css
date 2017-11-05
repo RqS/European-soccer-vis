@@ -1,0 +1,28 @@
+.country {
+    fill: #003B00;
+    stroke: #fff;
+    stroke-linejoin: round;
+    stroke-width:1;
+}
+.country:hover {
+    fill: #005B00;
+}
+.countryPoint{
+	fill: #CC6A00
+}
+.countryPoint:hover {
+	fill: #EE8A00
+}
+.totalLine:hover {
+	stroke:orange;
+}
+.colorStick {
+	fill:white;
+}
+.colorStickText {
+	fill:white;
+}
+.transferLabelBase {
+	fill:lightblue;
+    fill-opacity:0.7;
+}

@@ -1,0 +1,44 @@
+body {
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+}
+
+.carouselWrapper div.carousel-caption {
+    top: 6vw;
+    color: blanchedalmond;
+    font-weight: 600;
+    font-size: 25px;
+    padding-top: 20px;
+    background: rgba(0,0,0,0.3);
+    right: 0;
+    width: 100%;
+    left: 0;
+}
+
+.carouselWrapper img.inforimg{
+    position: absolute;
+    zoom: 0.7;
+    left: 49vw;
+    top: 20vw;
+}
+
+.mapview {
+    background-color: #000030;
+    zoom: 0.96;
+}
+
+.carouselWrapper Button.start_button {
+    position: absolute;
+    left: 46vw;
+    top: 45vw;
+    padding: 10px 20px 10px 20px;
+    z-index: 10;
+}
+
+.App > div > .navbar {
+    position: absolute;
+    z-index: 10;
+    background: rgba(255, 255, 255,0.8);
+    width: 100%;
+}

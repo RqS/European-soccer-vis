@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
-import land1 from '../img/landing.jpg';
-import land2 from '../img/landing1.jpg';
-import inforimg from '../img/infor.png';
+import { Button } from 'reactstrap';
 
 
 import {
@@ -12,14 +10,16 @@ import {
   CarouselCaption
 } from 'reactstrap';
 
+var scrollToElement = require('scroll-to-element');
+
 const items = [
   {
-    src: land1,
+    src: '../../img/landing.jpg',
     altText: 'European Soccer Transfer Market Visulization and Analysis',
     caption: 'Powered by Team LS -Z'
   },
   {
-    src: land2,
+    src: '../../img/landing1.jpg',
     altText: 'SOME FUN FACTS',
     caption: '______________❤______________'
   }
@@ -74,11 +74,12 @@ class Landing extends Component {
           altText={item.altText}
         >
           <CarouselCaption captionText={item.caption} captionHeader={item.altText}/>
-          {index===1?<img className = "inforimg" src = {inforimg} alt = ""/>:""}
+          {index===1?<img className = "inforimg" src = '../../img/infor.png' alt = ""/>:""}
+          {index===1?<Button className = "start_button" color="primary" size="lg" onClick={()=>{scrollToElement('#mapviewtitle', {offset: 50, duration: 800});}}>Get Start</Button>:""}
         </CarouselItem>
       );
     });
-
+ 
     return (
       <div className = "carouselWrapper">
       <Carousel

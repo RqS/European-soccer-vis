@@ -1,10 +1,9 @@
 import React from 'react';
 import { Card, Button, CardImg, CardTitle, CardText, CardGroup, CardSubtitle, CardBody } from 'reactstrap';
-import rqs from '../img/rqs.png';
 
 const Member = (props) => {
   return (
-    <CardGroup style = {{"marginTop":"-50px"}}>
+    <CardGroup style = {{"marginTop":"-40px"}}>
       <Card>
         <CardImg top width="100%" src="https://placeholdit.imgix.net/~text?txtsize=33&txt=256%C3%97180&w=256&h=180" alt="Card image cap" />
         <CardBody>
@@ -15,7 +14,7 @@ const Member = (props) => {
         </CardBody>
       </Card>
       <Card>
-        <CardImg top width="100%" src={rqs} alt="rqs" />
+        <CardImg top width="100%" src='../../img/rqs.png' alt="rqs" />
         <CardBody>
           <CardTitle>Runqi <span style = {{"fontWeight": "800", "fontSize": "xx-large", "color": "initial"}}>S</span>hao</CardTitle>
           <CardSubtitle>Soccer Fan</CardSubtitle>

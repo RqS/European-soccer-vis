@@ -1,10 +1,8 @@
 import React from 'react';
 import { Collapse, Navbar, NavbarToggler, NavbarBrand, Nav, NavItem, Button, ButtonGroup, ButtonDropdown } from 'reactstrap';
-import logo from '../img/logo.png';
 import { DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
-import Scroll from 'react-scroll';
 
-
+var scrollToElement = require('scroll-to-element');
 
 export default class Navigation extends React.Component {
   constructor(props) {
@@ -34,7 +32,7 @@ export default class Navigation extends React.Component {
       <div>
         <Navbar color="faded" light expand="md" style = {{"padding": "0.2rem 1rem"}}>
           <NavbarBrand href="#">
-            <img src={logo} className="App-logo" alt="logo" style = {{"zoom":"0.35", "marginLeft":"-25px", "marginRight":"10px", "marginTop":"-10px"}}/>
+            <img src='../../img/logo.png' className="App-logo" alt="logo" style = {{"zoom":"0.35", "marginLeft":"-25px", "marginRight":"10px", "marginTop":"-10px"}}/>
               INF558-Project
           </NavbarBrand>
           <NavbarToggler onClick={this.toggle} />
@@ -43,19 +41,16 @@ export default class Navigation extends React.Component {
             <NavItem>
             <ButtonGroup>
               <ButtonDropdown isOpen={this.state.dropdownOpen} toggle={this.droptoggle}>
-                <DropdownToggle caret>
+                <DropdownToggle color="link" caret style={{color: "black"}}>
                   Quick Explore
                 </DropdownToggle>
                 <DropdownMenu>
-                  <DropdownItem header>Header</DropdownItem>
-                  <DropdownItem disabled>Action</DropdownItem>
-                  <DropdownItem>Another Action</DropdownItem>
-                  <DropdownItem divider />
+                  <DropdownItem onClick={()=>{scrollToElement('#mapviewtitle', {offset: 50, ease: 'out-bounce', duration: 1500});}}>Map Overview</DropdownItem>
                   <DropdownItem>Another Action</DropdownItem>
                 </DropdownMenu>
               </ButtonDropdown>
-              <Button href="#Team" onClick={()=>{Scroll.animateScroll.scrollTo(700, 0);}}>Team</Button>
-              <Button href="https://github.com/INF554Fall17/project-ls-z">Github</Button>
+              <Button style={{color: "black"}} color="link" onClick={()=>{scrollToElement('#Team', {offset: 50, duration: 1500});}}>Team</Button>
+              <Button style={{color: "black"}} color="link" href="https://github.com/INF554Fall17/project-ls-z">Github</Button>
             </ButtonGroup>
             </NavItem>
             </Nav>
