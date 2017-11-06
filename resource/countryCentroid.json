@@ -4,27 +4,27 @@
 		"Portugal":[280,770,-1],
 		"Germany":[420,610,1],
 		"France":[450,620,-1],
-		"England":[230,590,1],
+		"England":[225,590,1],
 		"Netherlands":[327,659,1],
 		"Italy":[350,750,-1],
 		"Turkey":[380,720,1]
 	},
 	"Portugal":{
-		"Spain":[220,740,-1],
-		"Portugal":[215,684,0],
+		"Spain":[215,750,-1],
+		"Portugal":[230,700,0],
 		"Germany":[240,630,1],
 		"France":[240,670,1],
-		"England":[220,630,1],
-		"Netherlands":[215,684,1],
-		"Italy":[230,720,-1],
+		"England":[220,670,1],
+		"Netherlands":[215,630,1],
+		"Italy":[230,720,1],
 		"Turkey":[230,700,1]
 	},
 	"Germany":{
 		"Spain":[630,400,1],
-		"Portugal":[600,350,1],
-		"Germany":[642,307,0],
+		"Portugal":[620,180,1],
+		"Germany":[642,320,0],
 		"France":[590,370,-1],
-		"England":[650,220,1],
+		"England":[600,240,1],
 		"Netherlands":[560,330,-1],
 		"Italy":[670,400,1],
 		"Turkey":[700,220,1]
@@ -37,21 +37,21 @@
 		"England":[330,410,1],
 		"Netherlands":[460,340,1],
 		"Italy":[550,550,-1],
-		"Turkey":[540,450,-1]
+		"Turkey":[540,450,1]
 	},
 	"England":{
-		"Spain":[350,310,1],
-		"Portugal":[350,250,1],
+		"Spain":[350,280,1],
+		"Portugal":[350,230,1],
 		"Germany":[380,220,1],
-		"France":[390,310,1],
-		"England":[370,200,0],
+		"France":[390,315,1],
+		"England":[310,330,0],
 		"Netherlands":[390,240,1],
-		"Italy":[410,305,-1],
-		"Turkey":[410,285,1]
+		"Italy":[410,305,1],
+		"Turkey":[380,190,1]
 	},
 	"Netherlands":{
-		"Spain":[524,269,1],
-		"Portugal":[524,269,1],
+		"Spain":[510,290,1],
+		"Portugal":[524,260,1],
 		"Germany":[525,290,-1],
 		"France":[520,275,1],
 		"England":[535,245,1],
@@ -61,22 +61,22 @@
 	},
 	"Italy":{
 		"Spain":[710,610,-1],
-		"Portugal":[740,630,1],
+		"Portugal":[770,670,1],
 		"Germany":[685,485,1],
-		"France":[660,550,1],
+		"France":[660,540,-1],
 		"England":[580,505,1],
 		"Netherlands":[650,480,1],
-		"Italy":[610,505,0],
+		"Italy":[610,500,0],
 		"Turkey":[780,650,-1]
 	},
 	"Turkey":{
 		"Spain":[1050,740,1],
 		"Portugal":[1050,700,1],
-		"Germany":[1200,640,1],
+		"Germany":[1120,660,1],
 		"France":[1060,680,1],
-		"England":[1150,650,1],
+		"England":[1200,650,1],
 		"Netherlands":[1090,660,1],
 		"Italy":[1080,760,-1],
-		"Turkey":[1204,700,0]
+		"Turkey":[1100,700,1]
 	}
 }

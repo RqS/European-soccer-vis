@@ -45,8 +45,8 @@ export default class Navigation extends React.Component {
                   Quick Explore
                 </DropdownToggle>
                 <DropdownMenu>
-                  <DropdownItem onClick={()=>{scrollToElement('#mapviewtitle', {offset: 50, ease: 'out-bounce', duration: 1500});}}>Map Overview</DropdownItem>
-                  <DropdownItem>Another Action</DropdownItem>
+                  <DropdownItem onClick={()=>{scrollToElement('#mapviewtitle', {offset: 50, duration: 1500});}}>Map Overview</DropdownItem>
+                  <DropdownItem onClick={()=>{scrollToElement('#predictcharttitle', {offset: 50, duration: 1500});}}>Predict Model</DropdownItem>
                 </DropdownMenu>
               </ButtonDropdown>
               <Button style={{color: "black"}} color="link" onClick={()=>{scrollToElement('#Team', {offset: 50, duration: 1500});}}>Team</Button>

@@ -5,7 +5,7 @@ const Member = (props) => {
   return (
     <CardGroup style = {{"marginTop":"-40px"}}>
       <Card>
-        <CardImg top width="100%" src="https://placeholdit.imgix.net/~text?txtsize=33&txt=256%C3%97180&w=256&h=180" alt="Card image cap" />
+        <CardImg top width="100%" src='../../img/jfl.jpg' alt="Card image cap" />
         <CardBody>
           <CardTitle>Jianfa <span style = {{"fontWeight": "800", "fontSize": "xx-large", "color": "initial"}}>L</span>in</CardTitle>
           <CardSubtitle>Soccer Expert</CardSubtitle>
@@ -23,7 +23,7 @@ const Member = (props) => {
         </CardBody>
       </Card>
       <Card>
-        <CardImg top width="100%" src="https://placeholdit.imgix.net/~text?txtsize=33&txt=256%C3%97180&w=256&h=180" alt="Card image cap" />
+        <CardImg top width="100%" src='../../img/zhz.jpg' alt="Card image cap" />
         <CardBody>
           <CardTitle>Zihao <span style = {{"fontWeight": "800", "fontSize": "xx-large", "color": "initial"}}>Z</span>hai</CardTitle>
           <CardSubtitle>Soccer Game Expert</CardSubtitle>

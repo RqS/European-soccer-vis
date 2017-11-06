@@ -34,6 +34,7 @@ for line in i:
 			result["age"] = line["age"]
 			result["name"] = line["name"]
 			result["club name"] = line["current club"]
+			result["nationality"] = line["nationality"] if "nationality" in line else ""
 			lst.append(result)
 
 json.dump(lst, o)

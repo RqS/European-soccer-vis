@@ -4,7 +4,7 @@ import { Jumbotron, Button } from 'reactstrap';
 export default class MapView extends React.Component {
 
   componentDidMount() {
-    showMap();
+    showMapView();
   }
 
   render() {

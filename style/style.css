@@ -42,3 +42,8 @@ body {
     background: rgba(255, 255, 255,0.8);
     width: 100%;
 }
+
+.card img{
+    padding: 1vw;
+    height: 33vw;
+}

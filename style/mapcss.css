@@ -1,11 +1,17 @@
+.mapSvg {
+    background-color: #000030
+}
 .country {
     fill: #003B00;
     stroke: #fff;
     stroke-linejoin: round;
     stroke-width:1;
 }
-.country:hover {
-    fill: #005B00;
+.otherCountry {
+	fill: #001700;
+    stroke: #fff;
+    stroke-linejoin: round;
+    stroke-width:1;
 }
 .countryPoint{
 	fill: #CC6A00
@@ -14,7 +20,7 @@
 	fill: #EE8A00
 }
 .totalLine:hover {
-	stroke:orange;
+	stroke:lightgray;
 }
 .colorStick {
 	fill:white;
@@ -25,4 +31,40 @@
 .transferLabelBase {
 	fill:lightblue;
     fill-opacity:0.7;
+}
+.buttonBase{
+    fill: #000050
+}
+.totalTransferLabel {
+    fill: #0000BB
+}
+.buttonText {
+    fill: lightblue;
+}
+.seasonTitle {
+    fill: lightblue;
+}
+.buttonBase {
+    fill:#000020;
+}
+.detailPath:hover {
+    stroke:lightgrey;
+}
+.eachButtonBase{
+    fill:#000020;
+    stroke: lightblue
+}
+.detailTransferLabelBase {
+    fill:lightblue;
+    fill-opacity:0.7;
+}
+.playerNameValue {
+    fill:#8B0000;
+}
+.transformButtonText {
+    fill: lightblue;
+}
+.transformButtonBase {
+    fill:#000020;
+    stroke: lightblue
 }
