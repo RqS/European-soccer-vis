@@ -20,7 +20,7 @@
 	fill: #EE8A00
 }
 .totalLine:hover {
-	stroke:lightgray;
+	stroke:white;
 }
 .colorStick {
 	fill:white;
@@ -48,7 +48,7 @@
     fill:#000020;
 }
 .detailPath:hover {
-    stroke:lightgrey;
+    stroke:white;
 }
 .eachButtonBase{
     fill:#000020;
@@ -67,4 +67,10 @@
 .transformButtonBase {
     fill:#000020;
     stroke: lightblue
+}
+.detailCountryPoint {
+    fill: #CC6A00
+}
+.detailCountryPoint :hover {
+    fill: #EE8A00
 }

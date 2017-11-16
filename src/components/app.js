@@ -5,7 +5,8 @@ import Team from './team';
 import Member from './member';
 import MapView from './mapview'
 import PredictChart from './PredictChart'
-
+import CountryPieBar from './countrypiebar'
+import Inandout from './drawinout'
 
 class App extends Component {
 
@@ -15,6 +16,8 @@ class App extends Component {
        <Navigation/>
        <Landing/>
        <MapView/>
+       <Inandout/>
+       <CountryPieBar/>
        <PredictChart/>
        <Team/>
        <Member/>

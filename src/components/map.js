@@ -4,6 +4,7 @@ function showMapView(){
     svgH = svgW*4/7;
     center = [5, 70];
     scale = svgW*13/14;
+    durationTime=1000
     projection = d3.geo.mercator()
         .scale(scale)
         .translate([scale / 2.5, -scale/2.2])
@@ -24,7 +25,6 @@ function showMapView(){
                     targetCountries.push(key)
                 var clickedPath=0
                 function showMap(){
-                    //draw map
                     countries = svg.append("g");
                     country=countries.selectAll('.country')
                         .data(topojson.feature(data, data.objects.europe).features)
@@ -38,6 +38,23 @@ function showMapView(){
                         })
                         .attr('d', path)
                         .attr('id',function(d){return d.properties.name})
+                        .style('fill','#000030')
+                        .style('stroke','#000030')
+                        .style('fill-opacity',0)
+                    country.selectAll('.country')
+                        .transition()
+                        .delay(function(d,i){return (i+1)*150})
+                        .duration(500)
+                        .style('fill','#003B00')
+                        .style('stroke','#fff')
+                        .style('fill-opacity',1)
+                    country.selectAll('.otherCountry')
+                        .transition()
+                        .delay(function(d,i){return (i+1)*30})
+                        .duration(200)
+                        .style('fill','#001700')
+                        .style('stroke','#fff')
+                        .style('fill-opacity',1)
                 }
                 function showData(seasonValue){
                     var countryPath=svg.append("g")
@@ -195,21 +212,26 @@ function showMapView(){
                             .attr('stroke',function(d){
                                 var value=d['value']/1000000
                                 value=Math.pow(value,1/4)*50
-                                //console.log(d['from'],d['to'],d['value'],d[d['from']+' to '+d['to']],d[d['to']+' to '+d['from']])
                                 if(value<=0.5)
                                     return '#ffff00'
                                 else{
                                     
                                     value=Math.round(256-value).toString(16)
                                     color='#'+'ff'+value+"00"
-                                    //console.log(color)
                                     return color
                                 }
                                 
                             })
                             .attr('stroke-width',7)
                             .attr('fill','none')
-                            .style('stroke-opacity',0.85)
+                            .style('stroke-opacity',0)
+                            .transition()
+                            .delay(function(d,i){
+                                return i*80
+                            })
+                            .duration(durationTime/3)
+                            .style('stroke-opacity',0.8)
+                            //.style('stroke-opacity',0.85)
                         //draw country point
                         var countryPoint=countryPath.selectAll('.cp')
                             .data(macroscopicTransfer)
@@ -239,6 +261,13 @@ function showMapView(){
                                 }
                                 return cc[from][to][1]
                             })
+                            .style('fill-opacity',0)
+                            .transition()
+                            .delay(function(d,i){
+                                return i*80
+                            })
+                            .duration(durationTime/3)
+                            .style('fill-opacity',1)
                         countryPoint.append('circle')
                             .attr("class",'countryPoint')
                             .attr('r',8)
@@ -263,11 +292,18 @@ function showMapView(){
                                         to=key
                                 }
                                 return cc[to][from][1]
-                            })    
+                            })
+                            .style('fill-opacity',0)
+                            .transition()
+                            .delay(function(d,i){
+                                return i*80
+                            })
+                            .duration(durationTime/3)
+                            .style('fill-opacity',1)   
                     }
                     function totalAndDetailTransferEvent(){
                         var fontSize=12
-                        var baseWidth=180
+                        var baseWidth=200
                         countryPath.selectAll('.totalLine')
                             .on('mouseover',(ele,i)=>{
                                 countryPath.append('rect')
@@ -351,38 +387,61 @@ function showMapView(){
                                                     "current market value":pd[i]['current market value'],
                                                     "date of birth":pd[i]['date of birth'],
                                                     "name":pd[i]['name'],
-                                                    "position":pd[i]['position']
+                                                    "position":pd[i]['position'],
+                                                    "nationality":pd[i]['nationality'],
+                                                    "date of birth":pd[i]['date of birth']
                                                 }
                                                 showDataList.push(obj)
                                             }
                                         }
                                     }
                                 console.log("detail data number: "+showDataList.length)
-                                d3.selectAll('.countryPoint').remove()
+                                d3.selectAll('.countryPoint')
+                                    .transition()
+                                    .duration(durationTime)
+                                    .style('fill-opacity',0)
+                                d3.selectAll('.totalLine')
+                                    .transition()
+                                    .delay(function(d){
+                                        if((d['from']==from&&d['to']==to)||(d['to']==from&&d['from']==to))
+                                            return durationTime/2
+                                        else
+                                            return 0
+                                    })
+                                    .duration(durationTime/2)
+                                    .style('stroke-opacity',0)
                                 d3.selectAll('.transferLabelBase').remove()
                                 d3.selectAll('.transferLabel').remove()
-                                d3.selectAll('.totalLine').remove()
-                                var conList=document.getElementsByClassName('country')
-                                for(var i=0;i<conList.length;i++){
-                                    var newFrom,newTo
-                                    if(from=="England")
-                                        newFrom="United Kingdom"
-                                    else
-                                        newFrom=from
-                                    if(to=="England")
-                                        newTo="United Kingdom"
-                                    else
-                                        newTo=to
-                                    if(conList[i].id==newFrom||conList[i].id==newTo)
-                                        conList[i].style.fill="#66CC66"
-                                    else 
-                                        conList[i].style.fill="#001000"
-                                }
-                                conList=document.getElementsByClassName('otherCountry')
-                                for(var i=0;i<conList.length;i++){
-                                    conList[i].style.fill="#001000"
-                                }
-                                document.getElementById('mapSvg').style['background-color']='#000010'
+                                setTimeout(function(){
+                                    d3.selectAll('.countryPoint').remove()
+                                    d3.selectAll('.totalLine').remove()
+                                },durationTime)
+                                country.selectAll('.country')
+                                    .transition()
+                                    .duration(durationTime)
+                                    .style('fill',function(d,i){
+                                        var newFrom,newTo
+                                        if(from=="England")
+                                            newFrom="United Kingdom"
+                                        else
+                                            newFrom=from
+                                        if(to=="England")
+                                            newTo="United Kingdom"
+                                        else
+                                            newTo=to
+                                        if(d.properties.name==newFrom||d.properties.name==newTo)
+                                            return "#66CC66"
+                                        else 
+                                            return "#001000"
+                                    })
+                                country.selectAll('.otherCountry')
+                                    .transition()
+                                    .duration(durationTime)
+                                    .style('fill',"#001000")
+                                d3.select('#mapSvg')
+                                    .transition()
+                                    .duration(durationTime)
+                                    .style('background-color',"#000010")
                                 countryPath.selectAll('.detailPath')
                                     .data(showDataList)
                                     .enter()
@@ -393,12 +452,13 @@ function showMapView(){
                                         var color=(256-Math.round(d.transfer['transfer fee']/1000000)).toString(16)
                                         if(color.length==1)
                                             color='0'+color
-                                        //console.log('#'+color+color+color)
+                                        else if(color.length==3)
+                                            color='ff'
                                         return '#ff'+color+'00'
                                     })
                                     .attr('stroke-width',5)
                                     .attr('fill','none')
-                                    .style('stroke-opacity',0.85)
+                                    .style('stroke-opacity',0)
                                     .attr('d',function(d,i){
                                         var newFrom=d.transfer["moving from"].country
                                         var newTo=d.transfer["moving to"].country
@@ -421,13 +481,16 @@ function showMapView(){
                                             return str
                                         }
                                     })
+                                    .transition()
+                                    .duration(durationTime)
+                                    .style('stroke-opacity',0.7)
                                 countryPath.append('circle')
-                                    .attr('class','countryPoint')
+                                    .attr('class','detailCountryPoint')
                                     .attr('r',8)
                                     .attr('cx',cc[from][to][0])
                                     .attr('cy',cc[from][to][1])
                                 countryPath.append('circle')
-                                    .attr('class','countryPoint')
+                                    .attr('class','detailCountryPoint')
                                     .attr('r',8)
                                     .attr('cx',cc[to][from][0])
                                     .attr('cy',cc[to][from][1])   
@@ -435,13 +498,19 @@ function showMapView(){
 
 
                                 function detailTransferEvent(){
+                                    function ImageExist(url) 
+                                        {
+                                           var img = new Image();
+                                           img.src = url;
+                                           return img.height != 0;
+                                        }
                                     countryPath.selectAll('.detailPath')
                                         .on('mouseover',function(ele,i){
                                             countryPath.append('rect')
                                                 .attr('id',i+'-detail-transfer-label-base-r')
                                                 .attr('class','detailTransferLabelBase')
-                                                .attr('x', d3.event.offsetX+30)
-                                                .attr('y',d3.event.offsetY-100)
+                                                .attr('x', d3.event.offsetX+50)
+                                                .attr('y',d3.event.offsetY-90)
                                                 .attr('rx', 20)
                                                 .attr('ry',20)
                                                 .attr('width',baseWidth)
@@ -460,20 +529,14 @@ function showMapView(){
                                             countryPath.append('line')
                                                 .attr('id',i+'-detail-transfer-label-base-l')
                                                 .attr('class','detailTransferLabelBase')
-                                                .attr('x1',d3.event.offsetX+20)
-                                                .attr('y1',d3.event.offsetY)
-                                                .attr('x2',d3.event.offsetX+20)
-                                                .attr('y2',d3.event.offsetY)
+                                                .attr('x1',d3.event.offsetX+40)
+                                                .attr('y1',d3.event.offsetY+20)
+                                                .attr('x2',d3.event.offsetX+40)
+                                                .attr('y2',d3.event.offsetY+20)
                                                 .attr('stroke','lightblue')
                                                 .attr('stroke-width',10)
                                                 .attr('marker-end','url(#'+i+'-detail-transfer-label-base-t)')
                                             //player image
-                                            function ImageExist(url) 
-                                                {
-                                                   var img = new Image();
-                                                   img.src = url;
-                                                   return img.height != 0;
-                                                }
                                             countryPath.append('image')
                                                 .attr('class','playerImage')
                                                 .attr('id',ele.name+' image')
@@ -483,8 +546,8 @@ function showMapView(){
                                                     else
                                                         return '../../resource/Pictures/noImage.png'
                                                 })
-                                                .attr('x',d3.event.offsetX+35)
-                                                .attr('y',d3.event.offsetY-90)
+                                                .attr('x',d3.event.offsetX+55)
+                                                .attr('y',d3.event.offsetY-80)
                                                 .attr('width',80)
                                                 .attr('height',80)
                                             //player name
@@ -499,31 +562,33 @@ function showMapView(){
                                                     }
                                                     return newName
                                                 })
-                                                .attr('x',d3.event.offsetX+121)
-                                                .attr('y',d3.event.offsetY-60)
+                                                .attr('x',d3.event.offsetX+141)
+                                                .attr('y',d3.event.offsetY-65)
+                                                .style('font-size',9)
+                                            countryPath.append('text')
+                                                .attr('class','playerNameValue')
+                                                .text(function(){return ele.nationality})
+                                                .attr('x',d3.event.offsetX+141)
+                                                .attr('y',d3.event.offsetY-45)
+                                                .style('font-size',9)
+                                            countryPath.append('text')
+                                                .attr('class','playerNameValue')
+                                                .text(function(){return ele['date of birth'].split('Happy Birthday')[0]})
+                                                .attr('x',d3.event.offsetX+141)
+                                                .attr('y',d3.event.offsetY-25)
+                                                .style('font-size',9)
+                                            countryPath.append('text')
+                                                .attr('class','playerNameValue')
+                                                .text(function(){return ele.position.split(' - ')[1]})
+                                                .attr('x',d3.event.offsetX+141)
+                                                .attr('y',d3.event.offsetY-5)
                                                 .style('font-size',9)
                                             countryPath.append('text')
                                                 .attr('class','playerNameValue')
                                                 .text("€"+(ele.transfer['transfer fee']/1000000)+'m')
-                                                .attr('x',d3.event.offsetX+100)
-                                                .attr('y',d3.event.offsetY+25)
+                                                .attr('x',d3.event.offsetX+130)
+                                                .attr('y',d3.event.offsetY+35)
                                                 .style('font-size',8)
-                                            countryPath.append('text')
-                                                .attr('class','playerNameValue')
-                                                .text(function(){
-                                                    return ele.position.split(' - ')[1]
-                                                })
-                                                .attr('x',d3.event.offsetX+121)
-                                                .attr('y',d3.event.offsetY-20)
-                                                .style('font-size',9)
-                                            countryPath.append('text')
-                                                .attr('class','playerNameValue')
-                                                .text(function(){
-                                                    return ele.position.split(' - ')[0]
-                                                })
-                                                .attr('x',d3.event.offsetX+121)
-                                                .attr('y',d3.event.offsetY-40)
-                                                .style('font-size',9)
                                             countryPath.append('image')
                                                 .attr('class','clubImage')
                                                 .attr('id',ele.name+' '+ele.transfer["moving from"].club+' image')
@@ -533,8 +598,8 @@ function showMapView(){
                                                     else
                                                         return '../../resource/ClubPictures/noImage.png'  
                                                 })
-                                                .attr('x',d3.event.offsetX+50)
-                                                .attr('y',d3.event.offsetY-5)
+                                                .attr('x',d3.event.offsetX+70)
+                                                .attr('y',d3.event.offsetY+5)
                                                 .attr('width',30)
                                                 .attr('height',30)
                                             countryPath.append('image')
@@ -546,40 +611,40 @@ function showMapView(){
                                                     else
                                                         return '../../resource/ClubPictures/noImage.png'    
                                                 })
-                                                .attr('x',d3.event.offsetX+145)
-                                                .attr('y',d3.event.offsetY-5)
+                                                .attr('x',d3.event.offsetX+185)
+                                                .attr('y',d3.event.offsetY+5)
                                                 .attr('width',30)
                                                 .attr('height',30)
                                             countryPath.append('text')
                                                 .attr('class','playerNameValue')
-                                                .text("======>")
-                                                .attr('x',d3.event.offsetX+80)
-                                                .attr('y',d3.event.offsetY+15)
+                                                .text("========>")
+                                                .attr('x',d3.event.offsetX+102)
+                                                .attr('y',d3.event.offsetY+25)
                                                 .style('font-size',15)
                                             countryPath.append('text')
                                                 .attr('class','playerNameValue')
                                                 .text(ele.transfer["moving from"].club)
-                                                .attr('x',d3.event.offsetX+55)
-                                                .attr('y',d3.event.offsetY+32)
-                                                .style('font-size',6)
+                                                .attr('x',d3.event.offsetX+75)
+                                                .attr('y',d3.event.offsetY+42)
+                                                .style('font-size',7)
                                             countryPath.append('text')
                                                 .attr('class','playerNameValue')
                                                 .text(ele.transfer["moving to"].club)
-                                                .attr('x',d3.event.offsetX+150)
-                                                .attr('y',d3.event.offsetY+32)
-                                                .style('font-size',6)
+                                                .attr('x',d3.event.offsetX+190)
+                                                .attr('y',d3.event.offsetY+42)
+                                                .style('font-size',7)
                                             countryPath.append('text')
                                                 .attr('class','playerNameValue')
                                                 .text(ele.transfer["moving from"].country)
-                                                .attr('x',d3.event.offsetX+55)
-                                                .attr('y',d3.event.offsetY+38)
-                                                .style('font-size',6)
+                                                .attr('x',d3.event.offsetX+75)
+                                                .attr('y',d3.event.offsetY+48)
+                                                .style('font-size',7)
                                             countryPath.append('text')
                                                 .attr('class','playerNameValue')
                                                 .text(ele.transfer["moving to"].country)
-                                                .attr('x',d3.event.offsetX+150)
-                                                .attr('y',d3.event.offsetY+38)
-                                                .style('font-size',6)
+                                                .attr('x',d3.event.offsetX+190)
+                                                .attr('y',d3.event.offsetY+48)
+                                                .style('font-size',7)
                                         })
                                         .on('mouseout',function(){
                                             d3.selectAll('.detailTransferLabelBase').remove()
@@ -661,9 +726,13 @@ function showMapView(){
                                     el.style.fill='#003B00'
                             }
                         })
-                        .on('click',function(){
-                            alert("Jump to clubs' value by country")
-                        })
+                        // .on('click',function(ele,i){
+                        //     console.log(ele.properties.name)
+                        //     $('html,body').animate({
+                        //         scrollTop: $("#CountryPieBartitle").offset().top},
+                        //         'slow');
+                        //     showCountryPie(ele.properties.name, false);
+                        // })
                     countries.selectAll('.otherCountry')
                         .on('mouseover',(ele,i)=>{
                             countries.append('text')
@@ -777,30 +846,55 @@ function showMapView(){
                             }
                             clickedButton=ele
                             var el=document.getElementById(ele)
-                            d3.selectAll('.totalLine').remove()
-                            d3.selectAll('.countryPoint').remove()
-                            d3.selectAll('.detailPath').remove()
+                            d3.selectAll('.countryPoint')
+                                .transition()
+                                .delay(function(d,i){
+                                    return (i)*40
+                                })
+                                .duration(durationTime/2)
+                                .style('fill-opacity',0)
+                            d3.selectAll('.detailCountryPoint')
+                                .transition()
+                                .delay(durationTime/2)
+                                .duration(durationTime/3)
+                                .style('fill-opacity',0)
+                            d3.selectAll('.totalLine')
+                                .transition()
+                                .delay(function(d,i){return (i)*80})
+                                .duration(durationTime/2)
+                                .style('stroke-opacity',0)
+                            d3.selectAll('.detailPath')
+                                .transition()
+                                .delay(function(d,i){return (i)*80})
+                                .duration(durationTime/2)
+                                .style('stroke-opacity',0)
+                            d3.selectAll('.countryPoint').transition().delay(durationTime*3).remove()
+                            d3.selectAll('.detailCountryPoint').transition().delay(durationTime*3).remove()
+                            d3.selectAll('.totalLine').transition().delay(durationTime*3).remove()
+                            d3.selectAll('.detailPath').transition().delay(durationTime).remove()
                             if(ele!="CLEAR"){
                                 showData(ele)
                                 el.style.fill='#000020'
                             }
                             else{
-                                el.style.fill='lightblue'
+                                el.style.fill='000020'
                             }
-                            var conList=document.getElementsByClassName('otherCountry')
-                            for(var i=0;i<conList.length;i++){
-                                conList[i].style.fill="#001700"
-                            }
-                            conList=document.getElementsByClassName('country')
-                            for(var i=0;i<conList.length;i++){
-                                conList[i].style.fill="#003B00"
-                            }
-                            document.getElementById('mapSvg').style['background-color']='#000030'
+                            country.selectAll('.otherCountry')
+                                .transition()
+                                .duration(durationTime)
+                                .style('fill',"#001700")
+                            country.selectAll('.country')
+                                .transition()
+                                .duration(durationTime)
+                                .style('fill',"#003B00")
+                            d3.selectAll('#mapSvg')
+                                .transition()
+                                .duration(durationTime)
+                                .style('background-color',"#000030")
                             elelist=document.getElementsByClassName('eachButtonBase')
                             for(var i=0;i<elelist.length;i++){
                                 elelist[i].style.fill='#000020'
                             }
-                            //document.getElementById(ele.id).style.fill='lightgrey'
                             document.getElementById(ele+' base').style.fill="lightblue"
                         })
                         .on('mouseover',function(ele,i){
@@ -833,7 +927,11 @@ function showMapView(){
                                 el.style.fill='#000020'
                         })
                         .on('click',function(){
-                            alert('Jump to in&out bar chart by year and by country')
+                            $('html,body').animate({
+                                scrollTop: $("#inandouttitle").offset().top},
+                                'slow');
+                            showTotalTransferInAndOutValue(clickedButton);
+                            console.log("dsbfhjkfdghewkquhlidksjh" )
                         })
                 }
                 showMap()

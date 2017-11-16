@@ -1,7 +1,7 @@
 function showPredictChart() {
-    var margin = { top: 50, left: 75, bottom: 75, right: 50 };
-    var width = 600 - margin.left - margin.right;
-    var height = 600 - margin.top - margin.bottom;
+    var margin = { top: 50, left: 100, bottom: 75, right: 100 };
+    var width = window.innerWidth - margin.left - margin.right;
+    var height = window.innerHeight - margin.top - margin.bottom;
 
     var svg = d3.select("#age_price").append("svg")
         .attr('width', width + margin.left + margin.right)
@@ -31,10 +31,10 @@ function showPredictChart() {
             defence_price = new Object(),
             goalkeeper_price = new Object();
 
-        striker_price["position"] = "striker";
-        midfield_price["position"] = "midfield";
-        defence_price["position"] = "defence";
-        goalkeeper_price["position"] = "goalkeeper";
+        // striker_price["position"] = "striker";
+        // midfield_price["position"] = "midfield";
+        // defence_price["position"] = "defence";
+        // goalkeeper_price["position"] = "goalkeeper";
 
         for (var i = lowAge; i <= highAge; i++) {
             striker_price[i] = [];
@@ -125,49 +125,105 @@ function showPredictChart() {
             maxPrice = d3.max(price_list);
 
         // Set the ranges
-        var xScale = d3.scaleBand()
-            .domain(ageArray)
+        var xScale = d3.scaleLinear()
+            .domain([lowAge, highAge])
             .range([0, width]);  // x scale
 
         var yScale = d3.scaleLinear()
             .domain([minPrice, maxPrice])
             .range([height, margin.top]); // y scale
 
-        // var minPrice = d3.min(data, function (d) {
-        //     price_list = []
-        //     for (i = lowAge; i<= highAge; i++) {
-        //         price_list.push(d[i])
-        //     }
-        //     return d3.min(price_list);
-        // })
+        // console.log('min and max:', minPrice, maxPrice);
 
-        // var maxPrice = d3.max(data, function (d) {
-        //     return d3.max(Object.values(d));
-        // })
+        // console.log([Object.entries(data[0])][0]);
 
-        console.log('min and max:', minPrice, maxPrice);
-
-        var striker_line = d3.line()
-            .x(function (d) { 
+        var price_line = d3.line()
+            // .curve(d3.curveBasis)
+            .x(function (d) {
                 if (d[0] != "position") {
-                    return d[0]; 
+                    return xScale(d[0]); 
                 }
             })
             .y(function (d) { 
-                if (d[0] != "position") {
-                    return d[1]; 
+                if (d[0] != "position") {                   
+                    return yScale(d[1]); 
                 }
-            });
+            })
+            .curve(d3.curveMonotoneX); // apply smoothing to the line
 
+        // Striker
         svg.append("path")
-            .data(Object.entries(data[0]))
+            .data([Object.entries(data[0])])
             .attr("class", "line")
-            .attr("d", striker_line);
+            .attr("id", "striker")
+            .attr("d", price_line);
             
+        svg.selectAll(".dot")
+            .data(Object.entries(data[0]))
+            .enter().append("circle")
+            .attr("class", "striker_dot")
+            .attr("cx", function (d) { return xScale(d[0]); })
+            .attr("cy", function (d) { return yScale(d[1]); })
+            .attr("r", 5);
+
+        // Midfield
+        svg.append("path")
+            .data([Object.entries(data[1])])
+            .attr("class", "line")
+            .attr("id", "midfield")
+            .attr("d", price_line);
+        
+        svg.selectAll(".dot")
+            .data(Object.entries(data[1]))
+            .enter().append("circle")
+            .attr("class", "midfield_dot")
+            .attr("cx", function (d) { return xScale(d[0]); })
+            .attr("cy", function (d) { return yScale(d[1]); })
+            .attr("r", 5);
+        
+        // Defence
+        svg.append("path")
+            .data([Object.entries(data[2])])
+            .attr("class", "line")
+            .attr("id", "defence")
+            .attr("d", price_line);
+
+        svg.selectAll(".dot")
+            .data(Object.entries(data[2]))
+            .enter().append("circle")
+            .attr("class", "defence_dot")
+            .attr("cx", function (d) { return xScale(d[0]); })
+            .attr("cy", function (d) { return yScale(d[1]); })
+            .attr("r", 5);
+        
+        // Goalkeeper
+        svg.append("path")
+            .data([Object.entries(data[3])])
+            .attr("class", "line")
+            .attr("id", "goalkeeper")
+            .attr("d", price_line);
+            
+        svg.selectAll(".dot")
+            .data(Object.entries(data[3]))
+            .enter().append("circle")
+            .attr("class", "goalkeeper_dot")
+            .attr("cx", function (d) { return xScale(d[0]); })
+            .attr("cy", function (d) { return yScale(d[1]); })
+            .attr("r", 5);
+        // city.append("text")
+        //     .datum(function(d) { return {id: d.id, value: d.values[d.values.length - 1]}; })
+        //     .attr("transform", function(d) { return "translate(" + x(d.value.date) + "," + y(d.value.temperature) + ")"; })
+        //     .attr("x", 3)
+        //     .attr("dy", "0.35em")
+        //     .style("font", "10px sans-serif")
+        //     .text(function(d) { return d.id; });
+            
+        // Add the X axis
         svg.append("g")
             .attr("transform", "translate(0," + height + ")")
             .call(d3.axisBottom(xScale));
 
+        // Add the Y axis
         svg.append("g")
             .call(d3.axisLeft(yScale));
         

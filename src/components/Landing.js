@@ -75,7 +75,9 @@ class Landing extends Component {
         >
           <CarouselCaption captionText={item.caption} captionHeader={item.altText}/>
           {index===1?<img className = "inforimg" src = '../../img/infor.png' alt = ""/>:""}
-          {index===1?<Button className = "start_button" color="primary" size="lg" onClick={()=>{scrollToElement('#mapviewtitle', {offset: 50, duration: 800});}}>Get Start</Button>:""}
+          {index===1?<Button className = "start_button" color="primary" size="lg" onClick={()=>{
+            scrollToElement('#mapviewtitle', {offset: 50, duration: 800});
+          }}>Get Start</Button>:""}
         </CarouselItem>
       );
     });

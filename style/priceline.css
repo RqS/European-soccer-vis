@@ -1,0 +1,44 @@
+#striker {
+  fill: none;
+  stroke: steelblue;
+  stroke-width: 2px;
+}
+
+/* Style the dots by assigning a fill and stroke */
+.striker_dot {
+  fill: steelblue;
+  stroke: #fff;
+}
+
+#midfield {
+  fill: none;
+  stroke: limegreen;
+  stroke-width: 2px;
+}
+
+.midfield_dot {
+  fill: limegreen;
+  stroke: #fff;
+}
+
+#defence {
+  fill: none;
+  stroke: orange;
+  stroke-width: 2px;
+}
+
+.defence_dot {
+  fill: orange;
+  stroke: #fff;
+}
+
+#goalkeeper {
+  fill: none;
+  stroke: lightpink;
+  stroke-width: 2px;
+}
+
+.goalkeeper_dot {
+  fill: lightpink;
+  stroke: #fff;
+}

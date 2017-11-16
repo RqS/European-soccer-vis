@@ -47,3 +47,91 @@ body {
     padding: 1vw;
     height: 33vw;
 }
+
+.arc text {
+  font: 10px sans-serif;
+  text-anchor: middle;
+}
+
+.arc path {
+  stroke: #fff;
+}
+
+.toolTip {
+    position: absolute;
+    display: none;
+    width: auto;
+    height: auto;
+    background: none repeat scroll 0 0 white;
+    border: 0 none;
+    border-radius: 8px 8px 8px 8px;
+    box-shadow: -3px 3px 15px #888888;
+    color: black;
+    font: 12px sans-serif;
+    padding: 5px;
+    text-align: center;
+}
+
+.country_pic {
+    x: -60vw;
+    y: -6vw;
+    width: 120vw;
+    height: 12vw;
+}
+
+.navigation-bar {
+    position: fixed;
+    top: 0;
+    display: block;
+    width: 100%;
+    z-index: 100;
+}
+
+.select_country_total_value {
+    position: absolute;
+    top: 20px;
+    left: 40px;
+    -webkit-appearance: none; 
+    -moz-appearance: none;
+    appearance: none; 
+    border: 1px solid #e0e0e0;
+    border-radius: 0;
+    outline: none;
+    display: block;
+    padding: 10px;
+    background: #000;
+    color: #fff;
+}
+.select_country_total_value::after {
+    content: ">";
+}
+
+.CountryPieBar {
+    position: relative;
+}
+
+.twochart > * {
+    display: inline-block;
+}
+
+/* The animation code */
+@keyframes left2right {
+    from {margin-left: -50%;}
+    to {margin-left: 0;}
+}
+
+@keyframes right2left {
+    from {margin-right: -50%;}
+    to {margin-right: 0;}
+}
+
+/* The element to apply the animation to */
+.CountryPieBar.left2right {
+    animation-name: left2right;
+    animation-duration: 0.5s;
+}
+
+.CountryPieBar.right2left {
+    animation-name: right2left;
+    animation-duration: 0.5s;
+}

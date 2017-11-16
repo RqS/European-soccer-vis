@@ -1,0 +1,88 @@
+.inoutSvg {
+    background-color: gray;
+}
+.inBar {
+    fill: #00BFFF
+}
+.inBar:hover {
+    fill: #40FFFF
+}
+.outBar {
+    fill: #FF00BF
+}
+.outBar:hover {
+    fill: #FF40FF
+}
+.selfBar {
+    fill: #FFBF00
+}
+.selfBar:hover {
+    fill: #FFFF40 
+}
+.inBarLabel {
+	fill:#00BFFF;
+}
+.outBarLabel {
+	fill:#FF00BF;
+}
+.selfBarLabel {
+	fill:#FFBF00;
+}
+.typeButtonText {
+	fill:#00BFFF;
+	font-size: 15px;
+}
+.typeButtonBase {
+	stroke:#00BFFF;
+	fill:none;
+}
+.axis text{
+	stroke: white;
+	font-family: Consolas;
+}
+.country_label {
+	fill: white;
+}
+.axis path,
+.axis line {
+    stroke: white;
+    shape-rendering: crispEdges;
+}
+.legendText {
+	fill: white;
+	font-size: 10px;
+}
+.seasonButtonText {
+	fill:#00BFFF;
+	font-size: 15px;
+}
+.seasonButtonBase {
+	stroke:#00BFFF;
+	fill:none;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+}

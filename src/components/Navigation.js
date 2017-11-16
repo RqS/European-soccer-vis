@@ -29,9 +29,9 @@ export default class Navigation extends React.Component {
 
   render() {
     return (
-      <div>
+      <div className = "navigation-bar">
         <Navbar color="faded" light expand="md" style = {{"padding": "0.2rem 1rem"}}>
-          <NavbarBrand href="#">
+          <NavbarBrand>
             <img src='../../img/logo.png' className="App-logo" alt="logo" style = {{"zoom":"0.35", "marginLeft":"-25px", "marginRight":"10px", "marginTop":"-10px"}}/>
               INF558-Project
           </NavbarBrand>
@@ -45,11 +45,13 @@ export default class Navigation extends React.Component {
                   Quick Explore
                 </DropdownToggle>
                 <DropdownMenu>
-                  <DropdownItem onClick={()=>{scrollToElement('#mapviewtitle', {offset: 50, duration: 1500});}}>Map Overview</DropdownItem>
-                  <DropdownItem onClick={()=>{scrollToElement('#predictcharttitle', {offset: 50, duration: 1500});}}>Predict Model</DropdownItem>
+                  <DropdownItem onClick={()=>{scrollToElement('#mapviewtitle', {offset: 20, duration: 1500});}}>Transfer Map Overview</DropdownItem>
+                  <DropdownItem onClick={()=>{scrollToElement('#inandouttitle', {offset: 20, duration: 1500});}}>Transfer Market Overview</DropdownItem>
+                  <DropdownItem onClick={()=>{scrollToElement('#CountryPieBartitle', {offset: 20, duration: 1500});}}>Transfer Market Detail</DropdownItem>
+                  <DropdownItem onClick={()=>{scrollToElement('#predictcharttitle', {offset: 20, duration: 1500});}}>Predict Model</DropdownItem>
                 </DropdownMenu>
               </ButtonDropdown>
-              <Button style={{color: "black"}} color="link" onClick={()=>{scrollToElement('#Team', {offset: 50, duration: 1500});}}>Team</Button>
+              <Button style={{color: "black"}} color="link" onClick={()=>{scrollToElement('#Team', {offset: 20, duration: 1500});}}>Team</Button>
               <Button style={{color: "black"}} color="link" href="https://github.com/INF554Fall17/project-ls-z">Github</Button>
             </ButtonGroup>
             </NavItem>
