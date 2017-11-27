@@ -1,13 +1,43 @@
-#striker {
+/* Style the dots by assigning a fill and stroke */
+.line {
+  fill: none;
+  stroke-width: 2px;
+}
+
+.dot {
+  stroke: #ffffff;
+  stroke-width: 2px;
+}
+
+.lineChart_axis path,
+.lineChart_axis line {
+    fill: none;
+    stroke: black;
+    shape-rendering: crispEdges;
+    /* fill: none;
+    stroke: #1F1F2E;
+    stroke-opacity: 0.7;
+    shape-rendering: crispEdges; */
+}
+.lineChart_axis text,
+.axisLabel {
+    font-family: sans-serif;
+    font-size: 12px;
+    fill: black;
+}
+/* #striker {
   fill: none;
   stroke: steelblue;
   stroke-width: 2px;
 }
 
-/* Style the dots by assigning a fill and stroke */
 .striker_dot {
   fill: steelblue;
   stroke: #fff;
+}
+
+#striker_label {
+  fill: steelblue;
 }
 
 #midfield {
@@ -21,6 +51,10 @@
   stroke: #fff;
 }
 
+#midfield_label {
+  fill: limegreen;
+}
+
 #defence {
   fill: none;
   stroke: orange;
@@ -30,6 +64,10 @@
 .defence_dot {
   fill: orange;
   stroke: #fff;
+}
+
+#defence_label {
+  fill: orange;
 }
 
 #goalkeeper {
@@ -42,3 +80,36 @@
   fill: lightpink;
   stroke: #fff;
 }
+
+#goalkeeper_label {
+  fill: lightpink;
+} */
+
+.overlay {
+  fill: none;
+  pointer-events: all;
+}
+
+.mousePerLine circle {
+  fill: none;
+  /* stroke: black; */
+  stroke-width: 1px;
+}
+  
+.hover-line {
+  stroke: black;
+  stroke-width: 1px;
+  /* stroke-dasharray: 3,3; */
+}
+
+#age_price form {
+  position: relative;
+  left: 0px;
+  top: 50px;
+}
+
+/* #radio2 {
+  position: relative;
+  left: 400;
+  top: 300;
+} */

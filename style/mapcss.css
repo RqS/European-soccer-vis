@@ -2,22 +2,17 @@
     background-color: #000030
 }
 .country {
-    fill: #003B00;
     stroke: #fff;
     stroke-linejoin: round;
     stroke-width:1;
 }
 .otherCountry {
-	fill: #001700;
     stroke: #fff;
     stroke-linejoin: round;
     stroke-width:1;
 }
 .countryPoint{
 	fill: #CC6A00
-}
-.countryPoint:hover {
-	fill: #EE8A00
 }
 .totalLine:hover {
 	stroke:white;
@@ -36,7 +31,7 @@
     fill: #000050
 }
 .totalTransferLabel {
-    fill: #0000BB
+    fill: #0088DD
 }
 .buttonText {
     fill: lightblue;
@@ -73,4 +68,17 @@
 }
 .detailCountryPoint :hover {
     fill: #EE8A00
+}
+.typeButtonTitle {
+    fill: lightblue;
+}
+.typeButtonTitle {
+    fill: lightblue;
+}
+.transferPathTypeButtonTitle {
+    fill: lightblue;
+}
+.userInstruction{
+    fill: white;
+    font-size: 10px;
 }

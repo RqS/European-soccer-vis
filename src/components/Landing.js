@@ -15,7 +15,7 @@ var scrollToElement = require('scroll-to-element');
 const items = [
   {
     src: '../../img/landing.jpg',
-    altText: 'European Soccer Transfer Market Visulization and Analysis',
+    altText: 'European Soccer Transfer Market Visulization',
     caption: 'Powered by Team LS -Z'
   },
   {

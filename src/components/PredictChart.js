@@ -19,7 +19,15 @@ export default class PredictChart extends React.Component {
         }}/>
         <p className="lead">Predict player market value with respect to age and position</p>
         <hr className="my-2" />
-        <div id="age_price" className = "predictchart"></div>
+        <div id="age_price" className = "predictchart">
+          <form>
+            <label><input id="radio0" type="radio" name="position" value="general"/>General</label>
+            <label><input id="radio1" type="radio" name="position" value="striker"/>Striker</label>
+            <label><input id="radio2" type="radio" name="position" value="midfield"/>Midfield</label>
+            <label><input id="radio3" type="radio" name="position" value="defence"/>Defence</label>
+            <label><input id="radio4" type="radio" name="position" value="goalkeeper"/>Goalkeeper</label>
+          </form>
+        </div>
       </Jumbotron>
     </div>
     );

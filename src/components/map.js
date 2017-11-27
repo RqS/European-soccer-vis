@@ -4,7 +4,11 @@ function showMapView(){
     svgH = svgW*4/7;
     center = [5, 70];
     scale = svgW*13/14;
-    durationTime=1000
+    durationTime=600
+    var clickedButton
+    var clickedTypeButton
+    var transferValue=[]
+    var clickedTransferType
     projection = d3.geo.mercator()
         .scale(scale)
         .translate([scale / 2.5, -scale/2.2])
@@ -23,7 +27,7 @@ function showMapView(){
                 var targetCountries=[]
                 for(var key in cc)
                     targetCountries.push(key)
-                var clickedPath=0
+                var clickedPath
                 function showMap(){
                     countries = svg.append("g");
                     country=countries.selectAll('.country')
@@ -37,7 +41,12 @@ function showMapView(){
                                 return 'otherCountry'
                         })
                         .attr('d', path)
-                        .attr('id',function(d){return d.properties.name})
+                        .attr('id',function(d){
+                            if (d.properties.name!='United Kingdom')
+                                return d.properties.name
+                            else
+                                return 'UK'
+                        })
                         .style('fill','#000030')
                         .style('stroke','#000030')
                         .style('fill-opacity',0)
@@ -52,7 +61,7 @@ function showMapView(){
                         .transition()
                         .delay(function(d,i){return (i+1)*30})
                         .duration(200)
-                        .style('fill','#001700')
+                        .style('fill','#000015')
                         .style('stroke','#fff')
                         .style('fill-opacity',1)
                 }
@@ -70,18 +79,18 @@ function showMapView(){
                                     var k=0,f
                                     for(;k<macroscopicTransfer.length;k++)
                                     {
-                                        if (macroscopicTransfer[k]["from"]==pd[i]["transfer history"][j]["moving from"]["country"]&& macroscopicTransfer[k]["to"]==pd[i]["transfer history"][j]["moving to"]["country"])
-                                        {
+                                        if (macroscopicTransfer[k]["from"]==pd[i]["transfer history"][j]["moving from"]["country"]&& macroscopicTransfer[k]["to"]==pd[i]["transfer history"][j]["moving to"]["country"]){
                                             f=1
                                             break
                                         }
-                                        if (macroscopicTransfer[k]["to"]==pd[i]["transfer history"][j]["moving from"]["country"]&& macroscopicTransfer[k]["from"]==pd[i]["transfer history"][j]["moving to"]["country"])
-                                        {
+                                        if (macroscopicTransfer[k]["to"]==pd[i]["transfer history"][j]["moving from"]["country"]&& macroscopicTransfer[k]["from"]==pd[i]["transfer history"][j]["moving to"]["country"]){
                                             f=0
                                             break
                                         }
+                                        //if(macroscopicTransfer[k]["from"]==macroscopicTransfer[k]["to"])
+                                            //console.log(macroscopicTransfer[k]["from"],f)
                                     }
-                                    if (k!=macroscopicTransfer.length && macroscopicTransfer.length!=0){
+                                    if (k!=macroscopicTransfer.length && macroscopicTransfer.length!=0){//does have object
                                         if(isNaN(parseInt(pd[i]["transfer history"][j]["transfer fee"]))==true)
                                             macroscopicTransfer[k]["value"]+=0
                                         else
@@ -91,11 +100,12 @@ function showMapView(){
                                             key=macroscopicTransfer[k]['from']+' to '+macroscopicTransfer[k]['to']
                                         else
                                             key=macroscopicTransfer[k]['to']+' to '+macroscopicTransfer[k]['from']
+                                        //console.log(key)
                                         if(macroscopicTransfer[k][key]==undefined)
                                             macroscopicTransfer[k][key]=1
                                         else
                                             macroscopicTransfer[k][key]+=1
-                                        if(macroscopicTransfer[k][key+' Value']==undefined)
+                                        if(typeof(macroscopicTransfer[k][key+' Value'])=='undefined')
                                             if(isNaN(parseInt(pd[i]["transfer history"][j]["transfer fee"]))==true)
                                                 macroscopicTransfer[k][key+' Value']=0
                                             else
@@ -107,8 +117,7 @@ function showMapView(){
                                                 macroscopicTransfer[k][key+' Value']+=parseInt(pd[i]["transfer history"][j]["transfer fee"])
                                         macroscopicTransfer[k]['num']++
                                     }
-                                    else
-                                    {
+                                    else{
                                         var obj={
                                             "from":pd[i]["transfer history"][j]["moving from"]["country"],
                                             "to":pd[i]["transfer history"][j]["moving to"]["country"]
@@ -123,9 +132,11 @@ function showMapView(){
                                             obj[key+" Value"]=0
                                         else
                                             obj[key+" Value"]=parseInt(pd[i]["transfer history"][j]["transfer fee"])
-                                        var key=obj['to']+' to '+obj['from']
-                                        obj[key]=0
-                                        obj[key+" Value"]=0
+                                        if(obj['from']!=obj['to']){
+                                            var key=obj['to']+' to '+obj['from']
+                                            obj[key]=0
+                                            obj[key+" Value"]=0
+                                        }
                                         obj['num']=1
                                         obj['season']=seasonValue
                                         macroscopicTransfer.push(obj)
@@ -133,17 +144,14 @@ function showMapView(){
                                 }
                                 for(var i=0;i<macroscopicTransfer.length;i++){
                                     var obj=[
-                                        macroscopicTransfer[i]['from']+' <==> '+macroscopicTransfer[i]['to'],
                                         '€'+macroscopicTransfer[i]['value']/1000000+'m   '+macroscopicTransfer[i]['num']+' deals'
                                     ]
                                     var from=macroscopicTransfer[i]['from']
                                     var to=macroscopicTransfer[i]['to']
                                     if(macroscopicTransfer[i]['from']!=macroscopicTransfer[i]['to'])
                                     {
-                                        obj.push(macroscopicTransfer[i]['from']+' ==> '+macroscopicTransfer[i]['to'])
                                         var key=macroscopicTransfer[i]['from']+' to '+macroscopicTransfer[i]['to']
                                         obj.push('€'+macroscopicTransfer[i][key+' Value']/1000000+'m      '+macroscopicTransfer[i][key]+' deals')
-                                        obj.push(macroscopicTransfer[i]['from']+' <== '+macroscopicTransfer[i]['to'])
                                         key=macroscopicTransfer[i]['to']+' to '+macroscopicTransfer[i]['from']
                                         obj.push('€'+macroscopicTransfer[i][key+' Value']/1000000+'m      '+macroscopicTransfer[i][key]+' deals')
                                     }
@@ -158,6 +166,43 @@ function showMapView(){
                             .enter()
                             .append('path')
                             .attr('class','totalLine')
+                            .attr('id',function(d){
+                                return d['from']+' '+d['to']
+                            })
+                            .attr('d',function(d){
+                                var from,to
+                                var r=50
+                                for(var key in cc)
+                                {
+                                    if(d['from']==key)
+                                        from=key 
+                                    if(d['to']==key)
+                                        to=key
+                                }
+                                return "M"+String(cc[from][to][0])+","+String(cc[from][to][1])+' c0,0 0,0 0,0'
+                            })
+                            .attr('stroke',function(d){
+                                var value=d['value']/1000000
+                                value=Math.pow(value,1/4)*50
+                                if(value<=0.5)
+                                    return '#ffff00'
+                                else{
+                                    
+                                    value=Math.round(256-value).toString(16)
+                                    color='#'+'ff'+value+"00"
+                                    return color
+                                }
+                                
+                            })
+                            .attr('stroke-width',7)
+                            .attr('fill','none')
+                            .style('stroke-opacity',0)
+                            .transition()
+                            .delay(function(d,i){
+                                return i*80
+                            })
+                            .duration(durationTime*0.8)
+                            .style('stroke-opacity',0.8)
                             .attr('d',function(d){
                                 var from,to
                                 var r=50
@@ -209,28 +254,6 @@ function showMapView(){
                                     }
                                 }
                             })
-                            .attr('stroke',function(d){
-                                var value=d['value']/1000000
-                                value=Math.pow(value,1/4)*50
-                                if(value<=0.5)
-                                    return '#ffff00'
-                                else{
-                                    
-                                    value=Math.round(256-value).toString(16)
-                                    color='#'+'ff'+value+"00"
-                                    return color
-                                }
-                                
-                            })
-                            .attr('stroke-width',7)
-                            .attr('fill','none')
-                            .style('stroke-opacity',0)
-                            .transition()
-                            .delay(function(d,i){
-                                return i*80
-                            })
-                            .duration(durationTime/3)
-                            .style('stroke-opacity',0.8)
                             //.style('stroke-opacity',0.85)
                         //draw country point
                         var countryPoint=countryPath.selectAll('.cp')
@@ -238,7 +261,7 @@ function showMapView(){
                             .enter()
                         countryPoint.append('circle')
                             .attr("class",'countryPoint')
-                            .attr('r',8)
+                            .attr('r',0)
                             .attr('cx',function(d){
                                 var from,to
                                 for(var key in cc)
@@ -268,9 +291,10 @@ function showMapView(){
                             })
                             .duration(durationTime/3)
                             .style('fill-opacity',1)
+                            .attr('r',5)
                         countryPoint.append('circle')
                             .attr("class",'countryPoint')
-                            .attr('r',8)
+                            .attr('r',5)
                             .attr('cx',function(d){
                                 var from,to
                                 for(var key in cc)
@@ -302,7 +326,6 @@ function showMapView(){
                             .style('fill-opacity',1)   
                     }
                     function totalAndDetailTransferEvent(){
-                        var fontSize=12
                         var baseWidth=200
                         countryPath.selectAll('.totalLine')
                             .on('mouseover',(ele,i)=>{
@@ -343,36 +366,108 @@ function showMapView(){
                                     .attr('class','transferLabel')
                                     .text(function(d){return d})
                                     .attr('x',function(d,i){
-                                        if(i%2==0)
-                                            return d3.event.offsetX+(baseWidth-d.length*fontSize/2.25)/2
+                                        if(i!=1)
+                                            return d3.event.offsetX+90
                                         else
-                                            return d3.event.offsetX+(baseWidth-d.length*fontSize/6)/2
+                                            return d3.event.offsetX+85
                                     })
                                     .attr('y',function(d,i){
-                                        if(i%2==0)
-                                            return d3.event.offsetY-120+15*i
+                                        if(i!=1)
+                                            return d3.event.offsetY-125+34*i
                                         else
-                                            return d3.event.offsetY-120+15*i-3
+                                            return d3.event.offsetY-125+34*i+5
                                     })
                                     .style('font-size',function(d,i){
                                         if(i%2==0)
-                                            return fontSize
+                                            return 6
                                         else
                                             return 8
                                     })
                                     .style('fill',function(d,i){
-                                        if(i%2==0)
-                                            return '#000050'
-                                        else
-                                            return '#005000'
+                                        return '#005000'
                                     })
+                                countryPath.append('image')
+                                    .attr('class','countryFlag')
+                                    .attr('id',ele.from+' image')
+                                    .attr('xlink:href',function(){return '../../resource/CountryPictures/'+ele.from+'.png'})
+                                    .attr('x',d3.event.offsetX+20)
+                                    .attr('y',d3.event.offsetY-125)
+                                    .attr('width',60)
+                                    .attr('height',60)
+                                countryPath.append('image')
+                                    .attr('class','countryFlag')
+                                    .attr('id',ele.to+' image')
+                                    .attr('xlink:href',function(){return '../../resource/CountryPictures/'+ele.to+'.png'})
+                                    .attr('x',d3.event.offsetX+140)
+                                    .attr('y',d3.event.offsetY-125)
+                                    .attr('width',60)
+                                    .attr('height',60)
+                                countryPath.append('text')
+                                    .attr('class','totalTransferArrow')
+                                    .text("======>")
+                                    .attr('x',d3.event.offsetX+80)
+                                    .attr('y',d3.event.offsetY-115)
+                                    .style('font-size',15)
+                                if(ele.from!=ele.to){
+                                    countryPath.append('text')
+                                        .attr('class','totalTransferArrow')
+                                        .text("<======")
+                                        .attr('x',d3.event.offsetX+80)
+                                        .attr('y',d3.event.offsetY-65)
+                                        .style('font-size',15)
+                                    countryPath.append('text')
+                                        .attr('class','transferLabel')
+                                        .text("IN TATOL")
+                                        .attr('x',d3.event.offsetX+90)
+                                        .attr('y',d3.event.offsetY-95)
+                                        .style('font-size',10)
+                                }
+                                countryPath.append('text')
+                                    .attr('class','transferLabel')
+                                    .text(ele.from)
+                                    .attr('x',d3.event.offsetX+30)
+                                    .attr('y',d3.event.offsetY-55)
+                                    .style('font-size',8)
+                                countryPath.append('text')
+                                    .attr('class','transferLabel')
+                                    .text(ele.to)
+                                    .attr('x',d3.event.offsetX+155)
+                                    .attr('y',d3.event.offsetY-55)
+                                    .style('font-size',8)
                             })
                             .on('mouseout',(ele,i)=>{
                                 d3.selectAll('.transferLabelBase').remove()
                                 d3.selectAll('.transferLabel').remove()
+                                d3.selectAll('.countryFlag').remove()
+                                d3.selectAll('.totalTransferArrow').remove()
                             })
                             .on('click',function(ele,i){
-                                clickedPath=1
+                                clickedButton=undefined
+                                d3.selectAll('.typeButtonText')
+                                    .transition()
+                                    .duration(durationTime)
+                                    .attr('fill-opacity',0)
+                                    .remove()
+                                d3.selectAll('.typeButtonBase')
+                                    .transition()
+                                    .duration(durationTime)
+                                    .attr('fill-opacity',0)
+                                    .remove()
+                                d3.selectAll('.typeButtonTitle')
+                                    .transition()
+                                    .duration(durationTime)
+                                    .attr('fill-opacity',0)
+                                    .remove()
+                                d3.selectAll('.countryPoint')
+                                    .transition()
+                                    .duration(durationTime)
+                                    .attr('r',function(d){
+                                        if(d.from!=name&&d.to!=name)
+                                            return 0
+                                        else
+                                            return 5
+                                    })
+                                clickedPath=ele
                                 var from=ele['from']
                                 var to=ele['to']
                                 var showDataList=[]
@@ -395,11 +490,13 @@ function showMapView(){
                                             }
                                         }
                                     }
+
                                 console.log("detail data number: "+showDataList.length)
                                 d3.selectAll('.countryPoint')
                                     .transition()
                                     .duration(durationTime)
                                     .style('fill-opacity',0)
+                                var clickedLinePath
                                 d3.selectAll('.totalLine')
                                     .transition()
                                     .delay(function(d){
@@ -408,14 +505,29 @@ function showMapView(){
                                         else
                                             return 0
                                     })
-                                    .duration(durationTime/2)
-                                    .style('stroke-opacity',0)
+                                    .duration(durationTime*0.8)
+                                    //detail transition
+                                    .attr('d',function(d){
+                                        if((d['from']==from&&d['to']==to)||(d['to']==from&&d['from']==to)){
+                                            var str="M"+String(cc[d['from']][d['to']][0])+","+String(cc[d['from']][d['to']][1])+' c0,0 0,0 '+String(cc[d['to']][d['from']][0]-cc[d['from']][d['to']][0])+","+String(cc[d['to']][d['from']][1]-cc[d['from']][d['to']][1])
+                                            clickedLinePath=str
+                                            return str
+                                        }
+                                        else{
+                                            var str="M"+String(cc[d['from']][d['to']][0])+","+String(cc[d['from']][d['to']][1])+' c0,0 0,0 0,0'
+                                            return str
+                                        }
+                                        var str="M"+String(cc[d['from']][d['to']][0])+","+String(cc[d['from']][d['to']][1])+' c0,0 0,0 0,0'
+                                        return str
+                                    })
                                 d3.selectAll('.transferLabelBase').remove()
                                 d3.selectAll('.transferLabel').remove()
+                                d3.selectAll('.countryFlag').remove()
+                                d3.selectAll('.totalTransferArrow').remove()
                                 setTimeout(function(){
                                     d3.selectAll('.countryPoint').remove()
                                     d3.selectAll('.totalLine').remove()
-                                },durationTime)
+                                },durationTime*1.5)
                                 country.selectAll('.country')
                                     .transition()
                                     .duration(durationTime)
@@ -432,12 +544,12 @@ function showMapView(){
                                         if(d.properties.name==newFrom||d.properties.name==newTo)
                                             return "#66CC66"
                                         else 
-                                            return "#001000"
+                                            return "#000010"
                                     })
                                 country.selectAll('.otherCountry')
                                     .transition()
                                     .duration(durationTime)
-                                    .style('fill',"#001000")
+                                    .style('fill',"#000010")
                                 d3.select('#mapSvg')
                                     .transition()
                                     .duration(durationTime)
@@ -459,6 +571,10 @@ function showMapView(){
                                     .attr('stroke-width',5)
                                     .attr('fill','none')
                                     .style('stroke-opacity',0)
+                                    .attr('d',clickedLinePath)
+                                    .transition()
+                                    .delay(durationTime*1.2)
+                                    .duration(durationTime)
                                     .attr('d',function(d,i){
                                         var newFrom=d.transfer["moving from"].country
                                         var newTo=d.transfer["moving to"].country
@@ -481,23 +597,23 @@ function showMapView(){
                                             return str
                                         }
                                     })
-                                    .transition()
-                                    .duration(durationTime)
-                                    .style('stroke-opacity',0.7)
+                                    .style('stroke-opacity',0.8)
                                 countryPath.append('circle')
                                     .attr('class','detailCountryPoint')
-                                    .attr('r',8)
+                                    .attr('r',5)
                                     .attr('cx',cc[from][to][0])
                                     .attr('cy',cc[from][to][1])
                                 countryPath.append('circle')
                                     .attr('class','detailCountryPoint')
-                                    .attr('r',8)
+                                    .attr('r',5)
                                     .attr('cx',cc[to][from][0])
                                     .attr('cy',cc[to][from][1])   
 
 
 
                                 function detailTransferEvent(){
+                                    var buttonsY=80
+                                    var buttonsX=30
                                     function ImageExist(url) 
                                         {
                                            var img = new Image();
@@ -652,13 +768,232 @@ function showMapView(){
                                             d3.selectAll('.playerNameValue').remove()
                                             d3.selectAll('.clubImage').remove()
                                         })
+                                    if(clickedPath!=undefined){
+                                        d3.selectAll('.country')
+                                            .on('click',function(ele,i){
+                                                var name=ele.properties.name
+                                                if (name=="United Kingdom")
+                                                    name="England"
+                                                if(name==clickedPath.from||name==clickedPath.to){
+                                                    d3.selectAll('.country')
+                                                        .transition()
+                                                        .duration(durationTime)
+                                                        .style('fill',function(d){
+                                                            var countryName=d.properties.name
+                                                                if (countryName=="United Kingdom")
+                                                                    countryName="England"
+                                                                if(countryName==name)
+                                                                    return "#66CC66"
+                                                                else
+                                                                    return "#000010"
+                                                        })
+                                                        var transferPathType=['ALL','IN',"OUT"]
+                                                        var transferPathTypeSpace=svg.selectAll('.transferPathTypeButton')
+                                                            .data(transferPathType)
+                                                            .enter()
+                                                        transferPathTypeSpace.append('rect')
+                                                            .attr('id',function(d){return d+' base'})
+                                                            .attr('class','transferPathTypeButtonBase')
+                                                            .attr('width',40)
+                                                            .attr('height',20)
+                                                            .attr('x',buttonsX)
+                                                            .attr('y',function(d,i){
+                                                                return 5*buttonsY+i*30-12
+                                                            })
+                                                            .attr('rx', 5)
+                                                            .attr('ry',5)
+                                                            .style('fill','#000020')
+                                                            .style('stroke','lightblue')
+                                                            .attr('stroke-opacity',0)
+                                                            .transition()
+                                                            .duration(durationTime*2)
+                                                            .attr('stroke-opacity',1)
+                                                        transferPathTypeSpace.append('text')
+                                                            .text(function(d){return d})
+                                                            .attr('id',function(d){return d})
+                                                            .attr('class','transferPathTypeButtonText')
+                                                            .attr('x',buttonsX+10)
+                                                            .attr('y',function(d,i){
+                                                                return 5*buttonsY+i*30+1
+                                                            })
+                                                            .style('font-size',10)
+                                                            .style('fill','lightblue')
+                                                            .attr('fill-opacity',0)
+                                                            .transition()
+                                                            .duration(durationTime*2)
+                                                            .attr('fill-opacity',1)
+                                                        svg.append('text')
+                                                            .attr('class','transferPathTypeButtonTitle')
+                                                            .text("TRANSFER TYPE")
+                                                            .attr('y',5*buttonsY-30)
+                                                            .attr('x',buttonsX-22)
+                                                            .style('font-size',10)
+                                                            .attr('fill-opacity',0)
+                                                            .transition()
+                                                            .duration(durationTime*2)
+                                                            .attr('fill-opacity',1)
+                                                        document.getElementById('ALL base').style.fill="lightblue"
+                                                        document.getElementById('ALL').style.fill="#000020"
+                                                        clickedTransferType='ALL'
+                                                        svg.selectAll(".transferPathTypeButtonText")
+                                                            .on("click",function(pathele,i){
+                                                                var elelist=document.getElementsByClassName('transferPathTypeButtonText')
+                                                                for(var i=0;i<elelist.length;i++){
+                                                                    elelist[i].style.fill='lightblue'
+                                                                }
+                                                                clickedTypeButton=pathele
+                                                                elelist=document.getElementsByClassName('transferPathTypeButtonBase')
+                                                                for(var i=0;i<elelist.length;i++){
+                                                                    elelist[i].style.fill='#000020'
+                                                                }
+                                                                document.getElementById(pathele+' base').style.fill="lightblue"
+                                                                document.getElementById(pathele).style.fill="#000020"
+                                                                function drawDetailPath(d,i){
+                                                                    var newFrom=d.transfer["moving from"].country
+                                                                    var newTo=d.transfer["moving to"].country
+                                                                    var a=cc[newFrom][newTo][0]
+                                                                    var b=cc[newFrom][newTo][1]
+                                                                    var c=cc[newTo][newFrom][0]
+                                                                    var d=cc[newTo][newFrom][1]
+                                                                    if(newFrom!=newTo){
+                                                                        var e=(a+b+c-d)/2
+                                                                        var f=(b+c+d-a)/2
+                                                                        var w=3*i/showDataList.length
+                                                                        var cx=(cc[newFrom][newTo][0]+cc[newTo][newFrom][0])/2
+                                                                        var cy=(cc[newFrom][newTo][1]+cc[newTo][newFrom][1])/2
+                                                                        return "M"+a+','+b+" c0,0 "+(w*(e-cx)+cx-a)+','+(w*(f-cy)+cy-b)+" "+(c-a)+","+(d-b)
+                                                                    }
+                                                                    else{
+                                                                        var w=(i+1)/showDataList.length
+                                                                        var r=500*w+100
+                                                                        var str="M"+a+","+b+' '+'c'+String(-r*0.6)+','+String(-r*0.5)+' '+(r*0.6)+','+String(-r*0.5)+" "+String(cc[to][from][0]-cc[from][to][0])+","+String(cc[to][from][1]-cc[from][to][1])
+                                                                        return str
+                                                                    }
+                                                                }
+                                                                d3.selectAll('.detailPath')
+                                                                    .transition()
+                                                                    .delay(function(d,i){return i*50})
+                                                                    .duration(durationTime)
+                                                                    .attr('d',function(d,i){
+                                                                        if(pathele=='IN'){
+                                                                            if(d.transfer['moving from'].country==name){
+                                                                                var str="M"+String(cc[d.transfer['moving from'].country][d.transfer['moving to'].country][0])+","+String(cc[d.transfer['moving from'].country][d.transfer['moving to'].country][1])+' c0,0 0,0 0,0'
+                                                                                return str
+                                                                            }
+                                                                            else
+                                                                                return drawDetailPath(d,i)
+                                                                        }
+                                                                        if(pathele=='OUT'){
+                                                                            if(d.transfer['moving to'].country==name){
+                                                                                var str="M"+String(cc[d.transfer['moving from'].country][d.transfer['moving to'].country][0])+","+String(cc[d.transfer['moving from'].country][d.transfer['moving to'].country][1])+' c0,0 0,0 0,0'
+                                                                                return str
+                                                                            }
+                                                                            else
+                                                                                return drawDetailPath(d,i)
+                                                                        }
+                                                                        if(pathele=='ALL'){
+                                                                            return drawDetailPath(d,i)
+                                                                        }
+                                                                    })
+                                                                    .style('stroke-opacity',function(d,i){
+                                                                        if(pathele=='IN'){
+                                                                            if(d.transfer['moving from'].country==name){
+                                                                                return 0
+                                                                            }
+                                                                            else
+                                                                                return 0.8
+                                                                        }
+                                                                        if(pathele=='OUT'){
+                                                                            if(d.transfer['moving to'].country==name){
+                                                                                return 0
+                                                                            }
+                                                                            else
+                                                                                return 0.8
+                                                                        }
+                                                                        if(pathele=='ALL'){
+                                                                            return 0.8
+                                                                        }
+                                                                    })
+                                                            })
+                                                            .on('mouseover',function(pathele,i){
+                                                                if(pathele!=clickedTypeButton){
+                                                                    var el=document.getElementById(pathele)
+                                                                    el.style.fill='white'
+                                                                    el=document.getElementById(pathele+' base')
+                                                                    el.style.fill='gray'
+                                                                }
+                                                            })
+                                                            .on('mouseout',function(pathele,i){
+                                                                if (pathele!=clickedTypeButton) {
+                                                                    var el=document.getElementById(pathele)
+                                                                    el.style.fill='lightblue'
+                                                                    el=document.getElementById(pathele+' base')
+                                                                    el.style.fill='#000020'
+                                                                }
+                                                            })
+
+                                                }
+                                            })
+                                    }
                                 }
                                 detailTransferEvent()
                             })
                     }
+                    function changeCountryColor(){
+                        for(var i=0;i<targetCountries.length;i++){
+                            var obj={
+                                "country":targetCountries[i],
+                                "all":0,
+                                "out":0,
+                                "in":0,
+                                "self":0
+                            }
+                            transferValue.push(obj)
+                        }
+                        for(var i=0;i<macroscopicTransfer.length;i++){
+                            if (macroscopicTransfer[i]['from']==macroscopicTransfer[i]['to']){
+                                for(var j=0;j<transferValue.length;j++)
+                                    if(transferValue[j]['country']==macroscopicTransfer[i]['from']){
+                                        transferValue[j]['self']+=macroscopicTransfer[i]['value']
+                                        transferValue[j]['all']+=macroscopicTransfer[i]['value']
+                                    }
+                            }
+                            else{
+                                for(var j=0;j<transferValue.length;j++){
+                                    if(transferValue[j]['country']==macroscopicTransfer[i]['from']){
+                                        transferValue[j]['in']+=macroscopicTransfer[i][macroscopicTransfer[i]['to']+' to '+macroscopicTransfer[i]['from']+' Value']
+                                        transferValue[j]['out']+=macroscopicTransfer[i][macroscopicTransfer[i]['from']+' to '+macroscopicTransfer[i]['to']+' Value']
+                                        transferValue[j]['all']+=macroscopicTransfer[i]['value']
+                                    }
+                                    if(transferValue[j]['country']==macroscopicTransfer[i]['to']){
+                                        transferValue[j]['in']+=macroscopicTransfer[i][macroscopicTransfer[i]['from']+' to '+macroscopicTransfer[i]['to']+' Value']
+                                        transferValue[j]['out']+=macroscopicTransfer[i][macroscopicTransfer[i]['to']+' to '+macroscopicTransfer[i]['from']+' Value']
+                                        transferValue[j]['all']+=macroscopicTransfer[i]['value']
+                                    }
+                                }
+                            }
+                        }
+                        for(var i=0;i<transferValue.length;i++){
+                            var id='#'+transferValue[i]['country']
+                            if(transferValue[i]['country']=="England")
+                                id='#UK'
+                            d3.selectAll(id)
+                                .transition()
+                                .duration(durationTime)
+                                .style('fill',function(d){
+                                    var value=transferValue[i]['all']/1000000
+                                    value=Math.round(256-Math.pow(value,1/4)*40).toString(16)
+                                    if(value.length==1)
+                                        value='0'+value
+                                    return "#00"+value+'00'
+                                })
+                        }
+                    }
                     preprocessTotalTransferData()
                     drawTotalTransferPath()
-                    totalAndDetailTransferEvent() 
+                    totalAndDetailTransferEvent()
+                    if(typeof(clickedButton)!='undefined')
+                        changeCountryColor()
                 }
                 function showColorScale(){
                     //color scale
@@ -669,10 +1004,10 @@ function showMapView(){
                         .enter()
                     color.append('rect')
                         .attr('class','colorScale')
-                        .attr('width',30)
-                        .attr('height',8)
-                        .attr('x',function(d,i){return 120+i*30})
-                        .attr('y',20)
+                        .attr('width',40)
+                        .attr('height',12)
+                        .attr('x',function(d,i){return 1000+i*40})
+                        .attr('y',50)
                         .style('fill',function(d){
                             if (d==0)
                                 return "#ffff00"
@@ -689,17 +1024,70 @@ function showMapView(){
                             if(d!=0)
                                 return 1
                         })
-                        .attr('height',12)
-                        .attr('x',function(d,i){return 120+i*30})
-                        .attr('y',20)
+                        .attr('height',15)
+                        .attr('x',function(d,i){return 1000+i*40})
+                        .attr('y',50)
                     color.append('text')
                         .attr('class','colorStickText')
-                        .attr('x',function(d,i){return 143+i*30})
-                        .attr('y',42)
+                        .attr('x',function(d,i){return 1028+i*40})
+                        .attr('y',75)
                         .text(function(d){
-                            if(d!=8)
-                                return ((d+1)*64).toString()+'m'})
-                        .style('font-size',5)
+                            if(d!=8){
+                                var value=Math.pow(((d+1)*32/50),4)
+                                value=Math.round(value)
+                                return ('€'+value).toString()+'m'
+                            }
+                        })
+                        .style('font-size',8)
+                    colorScaleSvg.append('text')
+                        .text('Transfer Line Value Color Scale')
+                        .attr('x',1000)
+                        .attr('y',40)
+                        .attr('class','colorStickText')
+                        .style('font-size',15)
+                    color.append('rect')
+                        .attr('class','countryColorScale')
+                        .attr('width',40)
+                        .attr('height',12)
+                        .attr('x',function(d,i){return 1000+i*40})
+                        .attr('y',120)
+                        .style('fill',function(d){
+                            if (d==0)
+                                return "#00ff00"
+                            else{
+                                stick=(256-d*32).toString(16)
+                                if(stick.length==1)
+                                    stick='0'+stick
+                                return '#'+'00'+stick+"00"
+                            }
+                        })
+                    color.append('rect')
+                        .attr('class','colorStick')
+                        .attr('width',function(d){
+                            if(d!=0)
+                                return 1
+                        })
+                        .attr('height',15)
+                        .attr('x',function(d,i){return 1000+i*40})
+                        .attr('y',120)
+                    color.append('text')
+                        .attr('class','colorStickText')
+                        .attr('x',function(d,i){return 1028+i*40})
+                        .attr('y',145)
+                        .text(function(d){
+                            if(d!=8){
+                                var value=Math.pow(((d+1)*32/40),4)
+                                value=Math.round(value)
+                                return ('€'+value).toString()+'m'
+                            }
+                        })
+                        .style('font-size',8)
+                    colorScaleSvg.append('text')
+                        .text('Country Active Capital Color Scale')
+                        .attr('x',1000)
+                        .attr('y',110)
+                        .attr('class','colorStickText')
+                        .style('font-size',15)
                     //mouseover event
                     countries.selectAll('.country')
                         .on('mouseover',(ele,i)=>{
@@ -712,27 +1100,10 @@ function showMapView(){
                                     return ele.properties.name
                                 })
                                 .attr('font-size',15)
-                                if(clickedPath==0){
-                                    var el=document.getElementById(ele.properties.name)
-                                    if(targetCountries.indexOf(el.id)!=-1||el.id=="United Kingdom")
-                                        el.style.fill='#005B00'
-                                }
                         })
                         .on('mouseout',(ele,i)=>{
                             d3.selectAll('#'+ele.id+'-label').remove()
-                            if(clickedPath==0){
-                                var el=document.getElementById(ele.properties.name)
-                                if(targetCountries.indexOf(el.id)!=-1||el.id=="United Kingdom")
-                                    el.style.fill='#003B00'
-                            }
                         })
-                        // .on('click',function(ele,i){
-                        //     console.log(ele.properties.name)
-                        //     $('html,body').animate({
-                        //         scrollTop: $("#CountryPieBartitle").offset().top},
-                        //         'slow');
-                        //     showCountryPie(ele.properties.name, false);
-                        // })
                     countries.selectAll('.otherCountry')
                         .on('mouseover',(ele,i)=>{
                             countries.append('text')
@@ -744,46 +1115,18 @@ function showMapView(){
                                     return ele.properties.name
                                 })
                                 .attr('font-size',15)
-                                .style('fill','#0000BB')
                         })
                         .on('mouseout',(ele,i)=>{
                             d3.selectAll('#'+ele.id+'-label').remove()
                     })
                 }
                 function showButton(){
-                    clickedPath=0
                     var season=[]
                     var sea=[]
-                    var buttonsY=140
+                    var buttonsY=80
                     var buttonsX=30
-                    for(var i=0;i<pd.length;i++)
-                        for(var j=0;j<pd[i]["transfer history"].length;j++){
-                            var ele=pd[i]["transfer history"][j]["season"].slice(0,2)
-                            if(season.indexOf(pd[i]["transfer history"][j]["season"])==-1&&ele[0]!=9)
-                            { 
-                                var k=0
-                                for(;k<season.length;k++)
-                                    if(parseInt(ele)>parseInt(season[k].slice(0,2))){
-                                        season.splice(k,0,pd[i]["transfer history"][j]["season"])
-                                        break
-                                    }
-                                if(k==season.length)
-                                    season.push(pd[i]["transfer history"][j]["season"])
-                            }
-                            if(sea.indexOf(pd[i]["transfer history"][j]["season"])==-1&&ele[0]==9)
-                            { 
-                                var k=0
-                                for(;k<sea.length;k++)
-                                    if(parseInt(ele)>parseInt(sea[k].slice(0,2))){
-                                        sea.splice(k,0,pd[i]["transfer history"][j]["season"])
-                                        break
-                                    }
-                                if(k==sea.length)
-                                    sea.push(pd[i]["transfer history"][j]["season"])
-                            }
-                        }
-                    season=season.concat(sea)
-                    season.push('CLEAR')
+                    season=['17/18','16/17','15/16','14/15','13/14','12/13','11/12','10/11','09/10','CLEAR']
+                    transferType=['ALL TRANSFER','TRANSFER IN','TRANSFER OUT','SELF TRANSFER']
                     var button=svg.append('g')
                     button.append('rect')
                         .attr('class','buttonBase')
@@ -804,7 +1147,7 @@ function showMapView(){
                             return buttonsY+i*20-12
                         })
                         .attr('rx', 5)
-                                .attr('ry',5)
+                        .attr('ry',5)
                     buttonSpace.append('text')
                         .text(function(d){return d})
                         .attr('id',function(d){return d})
@@ -820,31 +1163,134 @@ function showMapView(){
                         .attr('x',buttonsX-10)
                         .attr('class','seasonTitle')
                         .style('font-size',15)
-                    button.append('rect')
-                        .attr('id','transformButtonBase')
-                        .attr('class','transformButtonBase')
-                        .attr('width',70)
-                        .attr('height',15)
-                        .attr('x',buttonsX-15)
-                        .attr('y',750)
-                        .attr('rx',5)
-                        .attr('ry',5)
-                    button.append('text')
-                        .text("TRANSFORM")
-                        .attr('id','transformButtonText')
-                        .attr('class','transformButtonText')
-                        .attr('x',buttonsX-11.8)
-                        .attr('y',761)
-                        .style('font-size',10)
                     //click event
-                    var clickedButton
                     button.selectAll(".buttonText")
                         .on("click",function(ele,i){
+                            if (clickedButton==undefined) {
+                                var typeButtonSpace=button.selectAll('.typeButton')
+                                    .data(transferType)
+                                    .enter()
+                                typeButtonSpace.append('rect')
+                                    .attr('id',function(d){return d+' base'})
+                                    .attr('class','typeButtonBase')
+                                    .attr('width',80)
+                                    .attr('height',15)
+                                    .attr('x',buttonsX-20)
+                                    .attr('y',function(d,i){
+                                        return 5*buttonsY+i*20-12
+                                    })
+                                    .attr('rx', 5)
+                                    .attr('ry',5)
+                                    .style('fill','#000020')
+                                    .style('stroke','lightblue')
+                                    .attr('stroke-opacity',0)
+                                    .transition()
+                                    .duration(durationTime*2)
+                                    .attr('stroke-opacity',1)
+                                typeButtonSpace.append('text')
+                                    .text(function(d){return d})
+                                    .attr('id',function(d){return d})
+                                    .attr('class','typeButtonText')
+                                    .attr('x',buttonsX-10)
+                                    .attr('y',function(d,i){
+                                        return 5*buttonsY+i*20-2
+                                    })
+                                    .style('font-size',8)
+                                    .style('fill','lightblue')
+                                    .attr('fill-opacity',0)
+                                    .transition()
+                                    .duration(durationTime*2)
+                                    .attr('fill-opacity',1)
+                                button.append('text')
+                                    .attr('class','typeButtonTitle')
+                                    .text("ACTIVE CAPITAL")
+                                    .attr('y',5*buttonsY-45)
+                                    .attr('x',buttonsX-22)
+                                    .style('font-size',10)
+                                    .attr('fill-opacity',0)
+                                    .transition()
+                                    .duration(durationTime*2)
+                                    .attr('fill-opacity',1)
+                                button.append('text')
+                                    .text("BY COUNTRY")
+                                    .attr('y',5*buttonsY-30)
+                                    .attr('x',buttonsX-15)
+                                    .attr('class','typeButtonTitle')
+                                    .style('font-size',10)
+                                    .attr('fill-opacity',0)
+                                    .transition()
+                                    .duration(durationTime*2)
+                                    .attr('fill-opacity',1)
+                                document.getElementById('ALL TRANSFER base').style.fill="lightblue"
+                                document.getElementById('ALL TRANSFER').style.fill="#000020"
+                                clickedTypeButton='ALL TRANSFER'
+                                button.selectAll(".typeButtonText")
+                                    .on("click",function(ele,i){
+                                        var elelist=document.getElementsByClassName('typeButtonText')
+                                        for(var i=0;i<elelist.length;i++){
+                                            elelist[i].style.fill='lightblue'
+                                        }
+                                        clickedTypeButton=ele
+                                        elelist=document.getElementsByClassName('typeButtonBase')
+                                        for(var i=0;i<elelist.length;i++){
+                                            elelist[i].style.fill='#000020'
+                                        }
+                                        document.getElementById(ele+' base').style.fill="lightblue"
+                                        document.getElementById(ele).style.fill="#000020"
+                                        for(var i=0;i<transferValue.length;i++){
+                                            var id='#'+transferValue[i]['country']
+                                            if(transferValue[i]['country']=="England")
+                                                id='#UK'
+                                            d3.selectAll(id)
+                                                .transition()
+                                                .duration(durationTime)
+                                                .style('fill',function(d){
+                                                    var value
+                                                    if(ele=="ALL TRANSFER")
+                                                        value=transferValue[i]['all']/1000000
+                                                    else if(ele=="TRANSFER IN")
+                                                        value=transferValue[i]['in']/1000000
+                                                    else if(ele=="TRANSFER OUT")
+                                                        value=transferValue[i]['out']/1000000
+                                                    else if(ele=="SELF TRANSFER")
+                                                        value=transferValue[i]['self']/1000000
+                                                    value=Math.round(256-Math.pow(value,1/4)*40).toString(16)
+                                                    if(value.length==1)
+                                                        value='0'+value
+                                                    return "#00"+value+'00'
+                                                })
+                                        }
+                                    })
+                                    .on('mouseover',function(ele,i){
+                                        if(ele!=clickedTypeButton){
+                                            var el=document.getElementById(ele)
+                                            el.style.fill='white'
+                                            el=document.getElementById(ele+' base')
+                                            el.style.fill='gray'
+                                        }
+                                    })
+                                    .on('mouseout',function(ele,i){
+                                        if (ele!=clickedTypeButton) {
+                                            var el=document.getElementById(ele)
+                                            el.style.fill='lightblue'
+                                            el=document.getElementById(ele+' base')
+                                            el.style.fill='#000020'
+                                        }
+                                    })
+                                    // d3.selectAll('.country')
+                                    //     .on('mouseover',function(ele,i){
+                                    //         var id=ele.properties.name
+                                    //         if(id=="United Kingdom")
+                                    //             id="UK"
+                                    //         console.log(document.getElementById(id).style.fill)
+                                    //         console.log(id)
+                                    //     })
+                            }
                             var elelist=document.getElementsByClassName('buttonText')
                             for(var i=0;i<elelist.length;i++){
                                 elelist[i].style.fill='lightblue'
                             }
-                            clickedButton=ele
+                            clickedTypeButton="ALL TRANSFER"
                             var el=document.getElementById(ele)
                             d3.selectAll('.countryPoint')
                                 .transition()
@@ -853,40 +1299,79 @@ function showMapView(){
                                 })
                                 .duration(durationTime/2)
                                 .style('fill-opacity',0)
+                                .attr('r',0)
                             d3.selectAll('.detailCountryPoint')
                                 .transition()
                                 .delay(durationTime/2)
                                 .duration(durationTime/3)
                                 .style('fill-opacity',0)
+                                .attr('r',0)
                             d3.selectAll('.totalLine')
                                 .transition()
                                 .delay(function(d,i){return (i)*80})
-                                .duration(durationTime/2)
+                                .duration(durationTime*0.8)
                                 .style('stroke-opacity',0)
+                                .attr('d',function(d){
+                                    var str="M"+String(cc[d['from']][d['to']][0])+","+String(cc[d['from']][d['to']][1])+' c0,0 0,0 0,0'
+                                    return str
+                                })
                             d3.selectAll('.detailPath')
                                 .transition()
-                                .delay(function(d,i){return (i)*80})
-                                .duration(durationTime/2)
+                                .delay(function(d,i){return (i)*30})
+                                .duration(durationTime)
                                 .style('stroke-opacity',0)
                             d3.selectAll('.countryPoint').transition().delay(durationTime*3).remove()
                             d3.selectAll('.detailCountryPoint').transition().delay(durationTime*3).remove()
-                            d3.selectAll('.totalLine').transition().delay(durationTime*3).remove()
-                            d3.selectAll('.detailPath').transition().delay(durationTime).remove()
-                            if(ele!="CLEAR"){
-                                showData(ele)
+                            d3.selectAll('.totalLine').transition().delay(durationTime*4.5).remove()
+                            d3.selectAll('.detailPath').transition().delay(durationTime*3).remove()
+                            d3.selectAll('.transferPathTypeButtonText')
+                                    .transition()
+                                    .duration(durationTime)
+                                    .attr('fill-opacity',0)
+                                    .remove()
+                                d3.selectAll('.transferPathTypeButtonBase')
+                                    .transition()
+                                    .duration(durationTime)
+                                    .attr('fill-opacity',0)
+                                    .remove()
+                                d3.selectAll('.transferPathTypeButtonTitle')
+                                    .transition()
+                                    .duration(durationTime)
+                                    .attr('fill-opacity',0)
+                                    .remove()
+                                clickedTransferType=undefined
+                                clickedPath=undefined
+                            if(ele!='CLEAR'){
+                                clickedButton=ele
+                                showData(ele)                  
                                 el.style.fill='#000020'
                             }
                             else{
-                                el.style.fill='000020'
+                                d3.selectAll('.country')
+                                    .transition()
+                                    .duration(durationTime)
+                                    .style('fill','#003B00')
+                                d3.selectAll('.typeButtonText')
+                                    .transition()
+                                    .duration(durationTime)
+                                    .attr('fill-opacity',0)
+                                    .remove()
+                                d3.selectAll('.typeButtonBase')
+                                    .transition()
+                                    .duration(durationTime)
+                                    .attr('fill-opacity',0)
+                                    .remove()
+                                d3.selectAll('.typeButtonTitle')
+                                    .transition()
+                                    .duration(durationTime)
+                                    .attr('fill-opacity',0)
+                                    .remove()
+                                clickedButton=undefined
                             }
                             country.selectAll('.otherCountry')
                                 .transition()
                                 .duration(durationTime)
-                                .style('fill',"#001700")
-                            country.selectAll('.country')
-                                .transition()
-                                .duration(durationTime)
-                                .style('fill',"#003B00")
+                                .style('fill',"#000015")
                             d3.selectAll('#mapSvg')
                                 .transition()
                                 .duration(durationTime)
@@ -895,7 +1380,16 @@ function showMapView(){
                             for(var i=0;i<elelist.length;i++){
                                 elelist[i].style.fill='#000020'
                             }
-                            document.getElementById(ele+' base').style.fill="lightblue"
+                            if(ele!='CLEAR')
+                                document.getElementById(ele+' base').style.fill="lightblue"
+                            var elelist=document.getElementsByClassName('typeButtonText')
+                            for(var i=0;i<elelist.length;i++){
+                                elelist[i].style.fill='lightblue'
+                            }
+                            elelist=document.getElementsByClassName('typeButtonBase')
+                            for(var i=0;i<elelist.length;i++){
+                                elelist[i].style.fill='#000020'
+                            }
                         })
                         .on('mouseover',function(ele,i){
                             if(ele!=clickedButton){
@@ -913,30 +1407,42 @@ function showMapView(){
                                 el.style.fill='#000020'
                             }
                         })
-                    button.selectAll('.transformButtonText')
-                        .on('mouseover',function(ele,i){
-                                var el=document.getElementById('transformButtonText')
-                                el.style.fill='white'
-                                el=document.getElementById('transformButtonBase')
-                                el.style.fill='gray'
-                        })
-                        .on('mouseout',function(ele,i){
-                                var el=document.getElementById('transformButtonText')
-                                el.style.fill='lightblue'
-                                el=document.getElementById('transformButtonBase')
-                                el.style.fill='#000020'
-                        })
-                        .on('click',function(){
-                            $('html,body').animate({
-                                scrollTop: $("#inandouttitle").offset().top},
-                                'slow');
-                            showTotalTransferInAndOutValue(clickedButton);
-                            console.log("dsbfhjkfdghewkquhlidksjh" )
-                        })
+                }
+                function showUserInstruction(){
+                    var ui=['· Choose SEASON to show transfer data in each eason and country color shows tot',
+                            '  al active capital by clicked transfer type and defaut is ALL TRANSFER.  ',
+                            '· Mouse over lines between countries, either total or detail transfer information will',
+                            '  shown up and clicked lines wil show detail information of deals between countries.',
+                            '. When deals shown up, choose one related country and clicked transfer type, it will',
+                            ' filter transfer type for you.'
+                    ]
+                    svg.append('rect')
+                        .attr('x',1000)
+                        .attr('y',170)
+                        .attr('width',400)
+                        .attr('height',160)
+                        .style('fill','#000020')
+                        .style('fill-opacity',0.8)
+                        .style('stroke','white')
+                    svg.append('text')
+                        .attr('class','userInstruction')
+                        .attr('x',1150)
+                        .attr('y',190)
+                        .text('User Instruction')
+                        .style('font-size',15)
+                    svg.selectAll('ui')
+                        .data(ui)
+                        .enter()
+                        .append('text')
+                        .attr('class','userInstruction')
+                        .attr('x',1005)
+                        .attr('y',function(d,i){return 210+i*20})
+                        .text(function(d){return d})
                 }
                 showMap()
                 showButton()
                 showColorScale()
+                showUserInstruction()
             })
         })
     })

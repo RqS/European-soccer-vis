@@ -33,7 +33,7 @@ export default class Navigation extends React.Component {
         <Navbar color="faded" light expand="md" style = {{"padding": "0.2rem 1rem"}}>
           <NavbarBrand>
             <img src='../../img/logo.png' className="App-logo" alt="logo" style = {{"zoom":"0.35", "marginLeft":"-25px", "marginRight":"10px", "marginTop":"-10px"}}/>
-              INF558-Project
+              INF554-Project
           </NavbarBrand>
           <NavbarToggler onClick={this.toggle} />
           <Collapse isOpen={this.state.isOpen} navbar>
@@ -42,13 +42,13 @@ export default class Navigation extends React.Component {
             <ButtonGroup>
               <ButtonDropdown isOpen={this.state.dropdownOpen} toggle={this.droptoggle}>
                 <DropdownToggle color="link" caret style={{color: "black"}}>
-                  Quick Explore
+                  Move To
                 </DropdownToggle>
                 <DropdownMenu>
                   <DropdownItem onClick={()=>{scrollToElement('#mapviewtitle', {offset: 20, duration: 1500});}}>Transfer Map Overview</DropdownItem>
-                  <DropdownItem onClick={()=>{scrollToElement('#inandouttitle', {offset: 20, duration: 1500});}}>Transfer Market Overview</DropdownItem>
-                  <DropdownItem onClick={()=>{scrollToElement('#CountryPieBartitle', {offset: 20, duration: 1500});}}>Transfer Market Detail</DropdownItem>
-                  <DropdownItem onClick={()=>{scrollToElement('#predictcharttitle', {offset: 20, duration: 1500});}}>Predict Model</DropdownItem>
+                  <DropdownItem onClick={()=>{scrollToElement('#inandouttitle', {offset: 20, duration: 1500});}}>Transfer Market Bar</DropdownItem>
+                  <DropdownItem onClick={()=>{scrollToElement('#CountryPieBartitle', {offset: 20, duration: 1500});}}>Market Value Donut</DropdownItem>
+                  <DropdownItem onClick={()=>{scrollToElement('#predictcharttitle', {offset: 20, duration: 1500});}}>Prediction Line Chart</DropdownItem>
                 </DropdownMenu>
               </ButtonDropdown>
               <Button style={{color: "black"}} color="link" onClick={()=>{scrollToElement('#Team', {offset: 20, duration: 1500});}}>Team</Button>

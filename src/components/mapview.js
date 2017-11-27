@@ -16,7 +16,7 @@ export default class MapView extends React.Component {
             showMapView();
           }
         }}/>
-        <p className="lead">View all transfers with your selected year</p>
+        <p className="lead">View transfers between 8 countries with your selected year</p>
         <hr className="my-2" />
         <div id="map" className = "mapview"></div>
       </Jumbotron>
