@@ -1,5 +1,6 @@
 .mapSvg {
-    background-color: #000030
+    background-color: #000030;
+    zoom: 0.90;
 }
 .country {
     stroke: #fff;
@@ -80,5 +81,5 @@
 }
 .userInstruction{
     fill: white;
-    font-size: 10px;
+    font-size: 14px;
 }

@@ -49,8 +49,8 @@ function showCountryPie(country_name, sunburst_flag) {
     var svg = d3.select("#donut"),
       width = +svg.attr("width"),
       height = +svg.attr("height"),
-      radius = Math.min(width, height) / 2 - 20,
-    g = svg.append("g").attr("transform", "translate(" + (width / 2 + 105) + "," + (height / 2 + 30) + ")");
+      radius = Math.min(width, height) / 2 - 50,
+    g = svg.append("g").attr("transform", "translate(" + (width / 2 + 90) + "," + (height / 2 + 30) + ")");
     pic_path = "../../resource/CountryPictures/" + country_name + ".png"
     
     prev_img = d3.selectAll('.country_pic');
@@ -79,7 +79,7 @@ function showCountryPie(country_name, sunburst_flag) {
 
     var label = d3.arc()
         .outerRadius(radius - 10)
-        .innerRadius(radius - 150);
+        .innerRadius(radius - 130);
 
     var div = d3.select("#CountryPieBar").append("div").attr("class", "toolTip");
 
@@ -122,7 +122,7 @@ function showCountryPie(country_name, sunburst_flag) {
                             if (sunburst_flag === false) {
                               d3.select('#CountryPieBar').attr("class", "CountryPieBar right2left");
                               d3.select('#Sunburstchart').append("svg").attr('id', 'sunburst')
-                              .attr("width", 670)
+                              .attr("width", 600)
                               .attr("height", 500);
                               showSunburst(country_name, d.data.club);
                               sunburst_flag = true;

@@ -19,7 +19,7 @@ export default class CountryPieBar extends React.Component {
         <hr className="my-2" />
         <div className = "twochart">
         <div id="CountryPieBar" className = "CountryPieBar">
-          <svg id = "donut" width="670" height="500"></svg>
+          <svg id = "donut" width="600" height="500"></svg>
         </div>
         <div id="Sunburstchart" className = "CountryPieBar">
         </div>

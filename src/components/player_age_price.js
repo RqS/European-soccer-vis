@@ -50,6 +50,9 @@ function showPredictChart() {
         var x;
         for (x in striker) {
             player = striker[x];
+            if (player.position == "Striker - Secondary Striker") {
+                continue;  // Too little data, just ignore it.
+            }
             if (parseInt(player.age) >= lowAge && parseInt(player.age) <= highAge) {
                 if (player.hasOwnProperty("current market value") && !player["current market value"].includes("unknown")) {
                     if (striker_price.hasOwnProperty(player.position)) {
@@ -70,6 +73,9 @@ function showPredictChart() {
 
         for (x in midfield) {
             player = midfield[x]
+            if (player.position == "Midfield - Left Midfield" || player.position == "Midfield - Right Midfield") {
+                continue; // Too little data, just ignore it.   
+            }
             if (parseInt(player.age) >= lowAge && parseInt(player.age) <= highAge) {
                 if (player.hasOwnProperty("current market value") && !player["current market value"].includes("unknown")) {
                     if (midfield_price.hasOwnProperty(player.position)) {
@@ -493,7 +499,7 @@ function showPredictChart() {
             .attr("x", -height / 2)
             .attr("dy", ".71em")
             .style("text-anchor", "middle")
-            .text("Market Price (£)");
+            .text("Market Price (€)");
         
         // Interactive effect
         var focus = svg.append("g")
@@ -524,6 +530,7 @@ function showPredictChart() {
                 .data(function() {
                     if (pos == "general") { return positionList; }
                     else {
+                        console.log(data[pos]);
                         return Object.keys(data[pos]);
                     }
                 })
@@ -546,14 +553,6 @@ function showPredictChart() {
                 .attr("transform", "translate(10,2.5)")
                 .style("opacity", "0")
                 .style("font-size", "10px");
-            
-            
-            // focus.append("circle")
-            //     .attr("r", 7);
-        
-            // focus.append("text")
-            //     .attr("x", 15)
-            //     .attr("dy", ".3em");
         
             // Overlay to capture hover
             svg.append("rect")
@@ -619,20 +618,19 @@ function showPredictChart() {
                 });
 
                 focus.select(".x-hover-line").attr("y2", height - yScale(maxPrice));
-                console.log(height);
-                console.log(maxPrice);
                 
                 focus.select(".y-hover-line").attr("x2", width + width);
                 d3.select(".age_dynamic").text("Age: " + dx);
             }
         }
         interactive_display("general");
+        document.getElementById("radio0").checked = true;  // Default general is selected
 
         // Change the plot to detail
-        d3.selectAll("input").on("change", change);
+        d3.selectAll("input[name='position']").on("change", change);
         // var timeout = setTimeout(function() {
-        //     d3.select("#radio1").property("checked", true).each(change);
-        // }, 2000);
+        //     d3.select("#radio0").property("checked", true).each(change);
+        // }, 10);
 
         function change() {
             // clearTimeout(timeout);

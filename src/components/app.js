@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import Navigation from './navigation';
-import Landing from './landing'
-import Team from './team';
-import Member from './member';
+import Navigation from './Navigation';
+import Landing from './Landing'
+import Team from './Team';
+import Member from './Member';
 import MapView from './mapview'
 import PredictChart from './PredictChart'
 import CountryPieBar from './countrypiebar'

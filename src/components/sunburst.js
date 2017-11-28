@@ -12,9 +12,9 @@ function showSunburst(country_name, club_name) {
 
       d3.select("#Sunburstchart").selectAll(".sunburst_g").remove();
 
-      var width = 650,
+      var width = 600,
       height = 500,
-      radius = (Math.min(width, height) / 2) - 20;
+      radius = (Math.min(width, height) / 2) - 50;
 
       var div = d3.select("#Sunburstchart").append("div").attr("class", "toolTip");
 
@@ -42,7 +42,7 @@ function showSunburst(country_name, club_name) {
           // .attr("height", height)
           .append("g")
           .attr("class", "sunburst_g")
-          .attr("transform", "translate(" + (width / 2 - 70) + "," + (height / 2 + 20) + ")")
+          .attr("transform", "translate(" + (width / 2 - 90) + "," + (height / 2 + 20) + ")")
           .style("opacity", 0);
 
       var legend = svg.selectAll(".position_legend")
@@ -50,7 +50,7 @@ function showSunburst(country_name, club_name) {
         .enter().append("g")
         .attr("class", "position_legend")
         // .style("opacity", 0)
-        .attr("transform", function(d, i) { return "translate(0," + i * 20 + ")"; });
+        .attr("transform", function(d, i) { return "translate(20," + i * 20 + ")"; });
 
       // draw legend colored rectangles
       legend.append("rect")

@@ -1409,17 +1409,17 @@ function showMapView(){
                         })
                 }
                 function showUserInstruction(){
-                    var ui=['· Choose SEASON to show transfer data in each eason and country color shows tot',
-                            '  al active capital by clicked transfer type and defaut is ALL TRANSFER.  ',
-                            '· Mouse over lines between countries, either total or detail transfer information will',
-                            '  shown up and clicked lines wil show detail information of deals between countries.',
-                            '. When deals shown up, choose one related country and clicked transfer type, it will',
-                            ' filter transfer type for you.'
+                    var ui=['· Choose SEASON to see transfer data of that season.',
+                            '· Color of country shows total active capital. ',
+                            '· Choose filter(left) to see in or out. ',
+                            '· Mouse over line between countries to see detailed information. ',
+                            '· Clicked line to see detailed information between two countries.',
+                            '. Click one country of two and use filter(left) to see more details.'
                     ]
                     svg.append('rect')
                         .attr('x',1000)
                         .attr('y',170)
-                        .attr('width',400)
+                        .attr('width',390)
                         .attr('height',160)
                         .style('fill','#000020')
                         .style('fill-opacity',0.8)

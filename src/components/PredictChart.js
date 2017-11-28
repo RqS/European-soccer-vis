@@ -19,6 +19,7 @@ export default class PredictChart extends React.Component {
         }}/>
         <p className="lead">Predict player market value with respect to age and position</p>
         <hr className="my-2" />
+        <p className="lead">Click radio to see detailed line chart of more specified position</p>
         <div id="age_price" className = "predictchart">
           <form>
             <label><input id="radio0" type="radio" name="position" value="general"/>General</label>
