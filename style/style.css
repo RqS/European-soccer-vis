@@ -91,16 +91,16 @@ body {
     position: absolute;
     top: 20px;
     left: 40px;
-    -webkit-appearance: none; 
+/*    -webkit-appearance: none; 
     -moz-appearance: none;
-    appearance: none; 
+    appearance: none; */
     border: 1px solid #e0e0e0;
     border-radius: 0;
     outline: none;
     display: block;
     padding: 10px;
-    background: #000;
-    color: #fff;
+/*    background: #000;
+    color: #fff;*/
 }
 .select_country_total_value::after {
     content: ">";

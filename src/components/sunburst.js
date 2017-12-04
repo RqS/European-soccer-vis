@@ -87,10 +87,10 @@ function showSunburst(country_name, club_name) {
 
       function form_value(s){
         if (s>=1000000) {
-          return s/1000000 + "M"
+          return (s/1000000).toFixed(2) + "M"
         }
         else if (s >= 1000) {
-          return s/1000 + "K"
+          return (s/1000).toFixed(2) + "K"
         }
         else {
           return s + ""

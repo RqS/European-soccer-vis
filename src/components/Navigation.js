@@ -45,10 +45,10 @@ export default class Navigation extends React.Component {
                   Move To
                 </DropdownToggle>
                 <DropdownMenu>
-                  <DropdownItem onClick={()=>{scrollToElement('#mapviewtitle', {offset: 20, duration: 1500});}}>Transfer Map Overview</DropdownItem>
-                  <DropdownItem onClick={()=>{scrollToElement('#inandouttitle', {offset: 20, duration: 1500});}}>Transfer Market Bar</DropdownItem>
-                  <DropdownItem onClick={()=>{scrollToElement('#CountryPieBartitle', {offset: 20, duration: 1500});}}>Market Value Donut</DropdownItem>
-                  <DropdownItem onClick={()=>{scrollToElement('#predictcharttitle', {offset: 20, duration: 1500});}}>Prediction Line Chart</DropdownItem>
+                  <DropdownItem onClick={()=>{scrollToElement('#mapviewtitle', {offset: 20, duration: 1500});}}>Transfer Map</DropdownItem>
+                  <DropdownItem onClick={()=>{scrollToElement('#inandouttitle', {offset: 20, duration: 1500});}}>Transfer Fee Changes</DropdownItem>
+                  <DropdownItem onClick={()=>{scrollToElement('#CountryPieBartitle', {offset: 20, duration: 1500});}}>Current Market Value</DropdownItem>
+                  <DropdownItem onClick={()=>{scrollToElement('#predictcharttitle', {offset: 20, duration: 1500});}}>Market Value Prediction</DropdownItem>
                 </DropdownMenu>
               </ButtonDropdown>
               <Button style={{color: "black"}} color="link" onClick={()=>{scrollToElement('#Team', {offset: 20, duration: 1500});}}>Team</Button>

@@ -9,15 +9,18 @@ export default class MapView extends React.Component {
     return (
     <div>
       <Jumbotron id="mapviewtitle">
-        <h1 className="display-3">Transfer Map Overview</h1>
+        <h1 className="display-3">Transfer Map</h1>
         <Waypoint onEnter={()=>{
           if (!MapViewFlag) {
             MapViewFlag = true;
             showMapView();
           }
         }}/>
-        <p className="lead">View transfers between 8 countries with your selected year</p>
+        <p className="lead">The map shows transfer records based on transfer fee</p>
         <hr className="my-2" />
+        <p className="lead">This section provides an overview of transfer market between 8 countries in selected year</p>
+        <p className="lead">You can view total transfer fees between countries, compare the amount of money spent and earned based on color scale</p>
+        <p className="lead">Follow the instruction to explore more</p>
         <div id="map" className = "mapview"></div>
       </Jumbotron>
     </div>

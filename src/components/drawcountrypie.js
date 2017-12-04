@@ -51,7 +51,7 @@ function showCountryPie(country_name, sunburst_flag) {
       height = +svg.attr("height"),
       radius = Math.min(width, height) / 2 - 50,
     g = svg.append("g").attr("transform", "translate(" + (width / 2 + 90) + "," + (height / 2 + 30) + ")");
-    pic_path = "../../resource/CountryPictures/" + country_name + ".png"
+    pic_path = "../../resource/CountryPictures/" + country_name.toLowerCase() + ".png"
     
     prev_img = d3.selectAll('.country_pic');
     prev_img.transition()
@@ -108,14 +108,14 @@ function showCountryPie(country_name, sunburst_flag) {
       div.style("left", event.clientX - 50 + "px");
       div.style("top", event.clientY - 100 + "px");
       div.style("display", "inline-block");
-    div.html((d.data.club)+"<br>"+(d.data.total_value / 1000000) + "M" + "<br>");});
+    div.html((d.data.club)+"<br>"+(d.data.total_value / 1000000).toFixed(2) + "M" + "<br>");});
     }
     else {
       d3.select('#CountryPieBar').selectAll(".arc").selectAll("path").on("mousemove", function(d) {
       div.style("left", event.clientX - 250 + "px");
       div.style("top", event.clientY - 200 + "px");
       div.style("display", "inline-block");
-      div.html((d.data.club)+"<br>"+(d.data.total_value / 1000000) + "M" + "<br>");});
+      div.html((d.data.club)+"<br>"+(d.data.total_value / 1000000).toFixed(2) + "M" + "<br>");});
     }
 
     d3.select('#CountryPieBar').select("#donut").selectAll(".arc").selectAll("path").attr("cursor", "pointer").on('click',function(d){

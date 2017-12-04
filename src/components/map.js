@@ -64,6 +64,11 @@ function showMapView(){
                         .style('fill','#000015')
                         .style('stroke','#fff')
                         .style('fill-opacity',1)
+                    showData('17/18')
+                    //clickedButton='17/18'
+                    document.getElementById('17/18 base').style.fill="lightblue"
+                    document.getElementById('17/18').style.fill="#000020"
+
                 }
                 function showData(seasonValue){
                     var countryPath=svg.append("g")
@@ -389,7 +394,7 @@ function showMapView(){
                                 countryPath.append('image')
                                     .attr('class','countryFlag')
                                     .attr('id',ele.from+' image')
-                                    .attr('xlink:href',function(){return '../../resource/CountryPictures/'+ele.from+'.png'})
+                                    .attr('xlink:href',function(){return '../../resource/CountryPictures/'+ele.from.toLowerCase()+'.png'})
                                     .attr('x',d3.event.offsetX+20)
                                     .attr('y',d3.event.offsetY-125)
                                     .attr('width',60)
@@ -397,7 +402,7 @@ function showMapView(){
                                 countryPath.append('image')
                                     .attr('class','countryFlag')
                                     .attr('id',ele.to+' image')
-                                    .attr('xlink:href',function(){return '../../resource/CountryPictures/'+ele.to+'.png'})
+                                    .attr('xlink:href',function(){return '../../resource/CountryPictures/'+ele.to.toLowerCase()+'.png'})
                                     .attr('x',d3.event.offsetX+140)
                                     .attr('y',d3.event.offsetY-125)
                                     .attr('width',60)
@@ -933,7 +938,33 @@ function showMapView(){
                                                             })
 
                                                 }
+                                                clickedPath=undefined
                                             })
+                                            .on('mouseover',function(ele,i){
+                                                if(clickedPath!=undefined){
+                                                       var name=ele.properties.name
+                                                    if(name=="United Kingdom")
+                                                        name='England'
+                                                    if(name==from||name==to){
+                                                        if (name=="England")
+                                                            name='UK'
+                                                        document.getElementById(name).style.fill='#99FF99'
+                                                    }   
+                                                }
+                                            })
+                                            .on('mouseout',function(ele,i){
+                                                if(clickedPath!=undefined){
+                                                    var name=ele.properties.name
+                                                    if(name=="United Kingdom")
+                                                        name='England'
+                                                    if(name==from||name==to){
+                                                        if (name=="England")
+                                                            name='UK'
+                                                        document.getElementById(name).style.fill='#66CC66'
+                                                    }
+                                                }
+                                            })
+
                                     }
                                 }
                                 detailTransferEvent()
@@ -1409,12 +1440,12 @@ function showMapView(){
                         })
                 }
                 function showUserInstruction(){
-                    var ui=['· Choose SEASON to see transfer data of that season.',
+                    var ui=['· Choose SEASON to see total transfers of the season.',
                             '· Color of country shows total active capital. ',
                             '· Choose filter(left) to see in or out. ',
                             '· Mouse over line between countries to see detailed information. ',
-                            '· Clicked line to see detailed information between two countries.',
-                            '. Click one country of two and use filter(left) to see more details.'
+                            '· Click line to see detailed information between two countries.',
+                            '· Click one country of two and use filter(left) to see more details.'
                     ]
                     svg.append('rect')
                         .attr('x',1000)
@@ -1439,8 +1470,8 @@ function showMapView(){
                         .attr('y',function(d,i){return 210+i*20})
                         .text(function(d){return d})
                 }
-                showMap()
                 showButton()
+                showMap()
                 showColorScale()
                 showUserInstruction()
             })

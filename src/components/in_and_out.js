@@ -8,7 +8,19 @@ function showTotalTransferInAndOutValue(option){
         .attr('height', height + margin.top + margin.bottom)
         .append('g')
 		.attr('transform', 'translate(' + margin.left + ', ' + margin.top + ')');
-		
+	
+	function form_value(s){
+        if (s>=1000000) {
+          return (s/1000000).toFixed(2)+ "M"
+        }
+        else if (s >= 1000) {
+          return (s/1000).toFixed(2) + "K"
+        }
+        else {
+          return s + ""
+        }
+      }
+
 	var x0 = d3.scaleBand()
 		.rangeRound([0, width])
 		.paddingInner(0.1);
@@ -108,6 +120,7 @@ function showTotalTransferInAndOutValue(option){
 		y.domain([0, d3.max(data, function(d) { return d3.max(selected_countries, function(key) { return d[key][option]; }); })]).nice();
 	  
 		season_based = svg.append("g")
+			.attr("class", "groupedBar")
 			.selectAll("g")
 		  	.data(data)
 		  	.enter().append("g")
@@ -142,12 +155,12 @@ function showTotalTransferInAndOutValue(option){
 			})
 			.on("mouseout", function() { tooltip.style("display", "none"); })
 			.on("mousemove", function(d) {
-				var xPosition = parseInt(d3.select(this).attr("x")) + 10;
-				var yPosition = parseInt(d3.select(this).attr("y")) + 5;
+				var xPosition = parseInt(d3.select(this).attr("x")) + parseInt(d3.select(this).attr("width")) / 2;
+				var yPosition = parseInt(d3.select(this).attr("y"));
 				// tooltip.style("left", xPosition + "px");
 				// tooltip.style("top", yPosition + "px");
 				tooltip.attr("transform", "translate(" + (xPosition + x0(d.season)) + "," + yPosition + ")");
-				tooltip.select("text").text(d.key + ":" + d.value);
+				tooltip.select("text").text(d.key + ":" + form_value(d.value));
 				console.log(d, xPosition, yPosition);
 			})
 			.on("click", function(d) {
@@ -187,47 +200,27 @@ function showTotalTransferInAndOutValue(option){
 					// }
 				}
 			});
-			// .on("click", BarTransition);
-			// .on("mouseover", function(d) {
-			// 	/* Get this bar's x/y values, then augment for the tooltip */
-			// 	var xPosition = d3.select(this).attr("x");
-			// 		yPosition = d3.select(this).attr("y");
-				
-			// 	console.log("I'm selected!", xPosition);
-			// 	d3.select(".tooltip1").classed("tooltip-left", false).classed("tooltip-right", true);
-			// 	/* Update the tooltip position and value */
-			// 	d3.select(".tooltip1")
-			// 		.style("left", xPosition + "px")
-			// 		.style("top", yPosition + "px")
-			// 		.select(".value")
-			// 		.text(d.key + ":" + d.value);
-				
-			// 	/* Show the tooltip */
-			// 	d3.select(".tooltip1").classed("hidden", false);
-			// })
-			// .on("mouseout", function() {
-			// 	/* Hide the tooltip */
-			// 	d3.select(".tooltip1").classed("hidden", true);			
-			// });
-		
-		// function BarTransition() {
-
-		// }
 	  
 		// Add x axis
 		svg.append("g")
-			.attr("class", "axis")
+			.attr("class", "Xaxis axis")
 			.attr("transform", "translate(0," + height + ")")
-			.call(d3.axisBottom(x0));
+			.call(d3.axisBottom(x0))
+			.append("text")
+			.attr("class", "axisLabel")
+            .attr("x", width / 2 + 10)
+            .attr("y", 40)
+            .style("text-anchor", "middle")
+            .text("Season");
 	  
 		// Add y axis
 		svg.append("g")
-			.attr("class", "axis")
+			.attr("class", "Yaxis axis")
 			.call(d3.axisLeft(y).tickFormat(d3.formatPrefix(".0", 1e6)))
 		  	.append("text")
 			.attr("x", 2)
 			.attr("y", y(y.ticks().pop()) + 0.5)
-			.attr("dy", "0.32em")
+			.attr("dy", "0.5em")
 			.attr("fill", "#000")
 			.attr("font-weight", "bold")
 			.attr("text-anchor", "start")
@@ -235,7 +228,7 @@ function showTotalTransferInAndOutValue(option){
 	  
 		var legend = svg.append("g")
 			.attr("font-family", "sans-serif")
-			.attr("font-size", 10)
+			.attr("font-size", 12)
 			.attr("text-anchor", "start")
 			.attr("class", "legend")
 			.selectAll("g")
@@ -309,15 +302,16 @@ function showTotalTransferInAndOutValue(option){
 				if (selected_countries[i] != country) {
 					d3.selectAll(".class_" + selected_countries[i])
 					.transition()
-					.duration(1000)          
-					.style("display", "none");
+					.duration(500)
+					.attr("width", 0); 
+					// .style("display", "none");
 				}
 			}
 
 			d3.selectAll(".class_" + country)
 				.transition()
 				.duration(1000)
-				.delay(250)
+				.delay(500)
 				.attr("x", x1(selected_countries[1]))
 				.attr("width", function(d) {
 					return x0.bandwidth() * 0.8;
@@ -328,7 +322,7 @@ function showTotalTransferInAndOutValue(option){
 			index = selected_countries.indexOf(country);
 			d3.selectAll(".class_" + country)
 				.transition()
-				.duration(1000)
+				.duration(500)
 				.attr("x", x1(selected_countries[index]))
 				.attr("width", function(d) {
 					return x1.bandwidth();
@@ -339,30 +333,61 @@ function showTotalTransferInAndOutValue(option){
 					d3.selectAll(".class_" + selected_countries[i])
 					.transition()
 					.duration(1000)
-					.delay(250)          
-					.style("display", null);
+					.delay(500)
+					.attr("width", x1.bandwidth());        
+					// .style("display", null);
 				}
 			}
 		}
-	}
 
-	// Prep the tooltip bits, initial display is hidden
-	var tooltip = svg.append("g")
-		.attr("class", "tooltip_inout")
-		.style("display", "none");
-      
-	tooltip.append("rect")
-		.attr("width", 120)
-		.attr("height", 20)
-		.attr("fill", "yellow")
-		.style("opacity", 0.5);
-	
-	tooltip.append("text")
-		.attr("x", 0)
-		.attr("dy", "1.2em")
-		.style("text-anchor", "start")
-		.attr("font-size", "12px")
-		.attr("font-weight", "bold");
+		// Prep the tooltip bits, initial display is hidden
+		var tooltip = svg.append("g")
+			.attr("class", "tooltip_inout")
+			.style("display", "none");
+		
+		tooltip.append("rect")
+			.attr("width", 130)
+			.attr("height", 20)
+			.attr("fill", "yellow")
+			.style("opacity", 0.5);
+
+		tooltip.append("text")
+			.attr("x", 65)
+			.attr("dy", "1.2em")
+			.style("text-anchor", "middle")
+			.attr("font-size", "12px")
+			.attr("font-weight", "bold");
+
+		var scales = ["total", "sell", "buy", "domestic"];
+		var ScaleButton = d3.select("#scaleButtons")
+			.selectAll("button")
+			.data(scales)
+			.enter().append("button")
+			.attr("class", "button")
+			.text(function(d) { return d;})
+			.on("click", function(buttonValue) {
+				y.domain([0, d3.max(data, function(d) { return d3.max(selected_countries, function(key) { return d[key][buttonValue]; }); })]).nice();
+				svg.transition().duration(750)
+					.select(".Yaxis")
+					.call(d3.axisLeft(y).tickFormat(d3.formatPrefix(".0", 1e6)));
+
+				for (i = 0; i < selected_countries.length; i++) {
+					d3.selectAll(".class_" + selected_countries[i])
+					.transition()
+					.duration(500)
+					.attr("y", function(d) {
+						var s = d.season;
+						var c = d.key;
+						var v = data[selected_seasons.indexOf(s)][c][buttonValue];
+						d.value = v;
+						return y(v);
+					})
+					.attr("height", function(d) {
+						return height - y(d.value);
+					})
+				}
+			})
+	}
 
 	
 }
